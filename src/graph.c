@@ -4,6 +4,9 @@
 #include <values.h>
 #include <stdlib.h>
 
+
+/* -------------------------------------------------------------------------- */
+
 /**
  * basic directed graph type
  * the implementation uses adjacency lists
@@ -28,6 +31,8 @@ struct graph_s {
 
 #include "graph.h"
 
+
+/* -------------------------------------------------------------------------- */
 
 /** Create a new graph with n vertices labeled 0..n-1 and no edges */
   graph_t *
@@ -58,6 +63,8 @@ graph_create( int n )
   return g;
 }
 
+
+/* -------------------------------------------------------------------------- */
 
 /** Deep copy a `graph_t'. */
   graph_t *
@@ -92,6 +99,8 @@ graph_clone( graph_t * g )
 }
 
 
+/* -------------------------------------------------------------------------- */
+
 /** Free all space used by `graph_t' */
   void
 graph_destroy( graph_t * g )
@@ -105,6 +114,8 @@ graph_destroy( graph_t * g )
   free( g );
 }
 
+
+/* -------------------------------------------------------------------------- */
 
 /** add an edge to an existing graph_t */
   void
@@ -209,6 +220,8 @@ graph_add_edge( graph_t * g, int u, int v )
 }
 
 
+/* -------------------------------------------------------------------------- */
+
 /** return the number of vertices in the graph_t */
   int
 graph_vertex_count( graph_t * g )
@@ -244,6 +257,8 @@ graph_in_degree( graph_t * g, int source )
   return g->alist[source]->din;
 }
 
+
+/* -------------------------------------------------------------------------- */
 
 /** when we are willing to call bsearch */
 #define BSEARCH_THRESHOLD  ( 10 )
@@ -323,6 +338,8 @@ graph_has_edge_internal( graph_t * g, int source, int sink, int * weight )
 }
 
 
+/* -------------------------------------------------------------------------- */
+
   int
 graph_has_edge( graph_t * g, int source, int sink )
 {
@@ -332,6 +349,8 @@ graph_has_edge( graph_t * g, int source, int sink )
   return graph_has_edge_internal( g, source, sink, & dummy );
 }
 
+
+/* -------------------------------------------------------------------------- */
 
   int
 graph_edge_weight( graph_t * g, int source, int sink )
@@ -345,6 +364,7 @@ graph_edge_weight( graph_t * g, int source, int sink )
 }
 
 
+/* -------------------------------------------------------------------------- */
 
 /**
  * invoke f on all edges (u,v) with source u
@@ -394,3 +414,10 @@ graph_foreach_weighted(
        );
     }
 }
+
+
+/* -------------------------------------------------------------------------- */
+
+
+
+/* ========================================================================== */
