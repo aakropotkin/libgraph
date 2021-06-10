@@ -2,7 +2,6 @@
 #include "dijkstra.h"
 #include <assert.h>
 #include <values.h>
-#include <stdlib.h>
 
 
 /** internal edge representation for dijkstra */

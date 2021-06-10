@@ -1,7 +1,6 @@
 #include "shortest_path.h"
 #include <assert.h>
 #include <values.h>
-#include <stdlib.h>
 
 
 /** data field for relax helper */
