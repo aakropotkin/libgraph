@@ -28,15 +28,6 @@ create_empty_array( int n )
 
 /* -------------------------------------------------------------------------- */
 
-  static inline int
-min_i( int a, int b )
-{
-  return ( a < b ) ? a : b;
-}
-
-
-/* -------------------------------------------------------------------------- */
-
 /**
  * Allocate and initialize search results structure
  * you need to do this before passing it to dfs or bfs
@@ -163,11 +154,45 @@ push_edge( graph_t * g, int u, int v, void * data )
   q->e[q->top].u = u;
   q->e[q->top].v = v;
   q->top++;
+
   if ( q->top < n )
     {
       q->e[q->top].u = SEARCH_INFO_NULL;
       q->e[q->top].v = SEARCH_INFO_NULL;
     }
+}
+
+
+  static struct edge
+stack_pop_edge( struct queue * q )
+{
+  assert( q != NULL );
+  assert( ! queue_empty( q ) );
+
+  q->top--;
+  struct edge e = q->e[q->top];
+
+  /* Clear the spot where `e' was stored. */
+  q->e[q->top].u = SEARCH_INFO_NULL;
+  q->e[q->top].v = SEARCH_INFO_NULL;
+
+  return e;
+}
+
+
+  static struct edge
+queue_pop_edge( struct queue * q )
+{
+  assert( q != NULL );
+  assert( ! queue_empty( q ) );
+
+  struct edge e = q->e[q->bottom];
+
+  q->e[q->bottom].u = SEARCH_INFO_NULL;
+  q->e[q->bottom].v = SEARCH_INFO_NULL;
+  q->bottom++;
+
+  return e;
 }
 
 
@@ -193,50 +218,26 @@ node_seen( struct search_info * s, int node )
 
 enum search_kind_e {
   SK_DFS = 0,
-  SK_BFS,
-  SK_TARJAN,
+  SK_BFS
 };
 
-/**
- * This rather horrible function implements
- * dfs if use_queue == 0
- * bfs if use_queue == 1
- */
+/** This implements both DFS and BFS */
   static void
 generic_search( struct search_info * r, int root, enum search_kind_e sk )
 {
   assert( r != NULL );
   assert( r->graph != NULL );
+  assert( ( sk == SK_BFS ) || ( sk == SK_DFS ) );
 
   const int n = graph_vertex_count( r->graph );
-
-  /* Queue/Stack */
-  struct queue * q = queue_create_for_graph( r->graph );
-
-  /* Edge we are working on */
-  struct edge cur;
-
-  /* Push the root */
-  push_edge( r->graph, root, root, q );
+  struct queue * q = queue_create_for_graph( r->graph );  /* Queue/Stack */
+  struct edge cur;  /* Edge we are working on */
+  push_edge( r->graph, root, root, q );  /* Push the root */
 
   /* While q.e not empty */
   while( ! queue_empty( q ) )
     {
-      if ( sk == SK_BFS )
-        {
-          cur = q->e[q->bottom];
-          q->e[q->bottom].u = SEARCH_INFO_NULL;
-          q->e[q->bottom].v = SEARCH_INFO_NULL;
-          q->bottom++;
-        }
-      else  /* DFS */
-        {
-          q->top--;
-          cur = q->e[q->top];
-          q->e[q->top].u = SEARCH_INFO_NULL;
-          q->e[q->top].v = SEARCH_INFO_NULL;
-        }
-
+      cur = ( sk == SK_BFS ) ? queue_pop_edge( q ) : stack_pop_edge( q );
       /* Did we visit `sink' already? */
       if ( _node_seen( r, cur.v ) )
         {
@@ -250,16 +251,9 @@ generic_search( struct search_info * r, int root, enum search_kind_e sk )
       r->preorder[r->reached] = cur.v;
       r->reached++;
 
-      if ( cur.u == cur.v )
-        {
-          /* We could avoid this if we were certain `SEARCH_INFO_NULL'
-           * would never be anything but `-1' */
-          r->depth[cur.v] = 0;
-        }
-      else
-        {
-          r->depth[cur.v] = r->depth[cur.u] + 1;
-        }
+      /* We could avoid this if we were certain `SEARCH_INFO_NULL'
+       * would never be anything but `-1' */
+      r->depth[cur.v] = ( cur.u == cur.v ) ? 0 : r->depth[cur.u] + 1;
 
       /* Push all outgoing edges */
       graph_foreach( r->graph, cur.v, push_edge, q );
@@ -488,10 +482,8 @@ mark_subgraph_groups( graph_t * g )
 graph_is_connected( graph_t * g )
 {
   assert( g != NULL );
-
   const int n = graph_vertex_count( g );
   assert( 0 < n );
-
   struct search_info * s = search_info_create( g );
   assert( s != NULL );
 
@@ -518,34 +510,24 @@ graph_is_connected( graph_t * g )
 
 /* -------------------------------------------------------------------------- */
 
-/**
- * FIXME: Use Tarjan's Algo. This is wicked slow.
- */
   int
 graph_is_strongly_connected( graph_t * g )
 {
   assert( g != NULL );
-
   const int n = graph_vertex_count( g );
-  int v = -1;
   assert( 0 < n );
-
-  struct search_info * s = NULL;
-
-  for ( int i = 0; i < n; i++ )
+  int * scss = tarjan( g );
+  for ( int i = 1; i < n; i++ )
     {
-      s = search_info_create( g );
-      assert( s != NULL );
-      dfs( s, i );
-      v = s->reached;
-      search_info_destroy( s );
-      s = NULL;
-      if ( v < n )
+      if ( scss[i - 1] != scss[i] )
         {
+          free( scss );
+          scss = NULL;
           return 0;
         }
     }
-
+  free( scss );
+  scss = NULL;
   return 1;
 }
 
@@ -569,36 +551,8 @@ array_contains( int * hay, int needle, int len )
 
 /* -------------------------------------------------------------------------- */
 
-  static int
-source_on_stack( struct search_info * s, int source )
-{
-  assert( s != NULL );
-  return s->tj_stack[source] != SEARCH_INFO_NULL;
-}
-
-
-/* -------------------------------------------------------------------------- */
-
-  void
-update_lowlink( graph_t * g, int u, int v, void * data )
-{
-  assert( data != NULL );
-  struct search_info * s = data;
-  assert( node_seen( s, v ) );
-  if ( ( s->lowlink[v] < s->lowlink[u] ) &&
-       ( s->depth[v] != SEARCH_INFO_NULL )
-     )
-    {
-      s->lowlink[u] = s->lowlink[v];
-    }
-}
-
-
 /**
  * Assign Strongly Connected Component labels to each vertex.
- * FIXME: This implementation does not enforce the stack invariant and needs to
- *        be fixed!
- *
  * Tarjan in a nushell:
  *
  * 1. Mark the id of each node as unvisited.
@@ -617,6 +571,47 @@ update_lowlink( graph_t * g, int u, int v, void * data )
  *    component ( `time[u] == lowlink[u]' ) then pop nodes off the stack until
  *    the current node is removed.
  */
+
+
+/**
+ * Tarjan helper function to determine if a node is "on the stack" from the
+ * phrasing of the actual algorithm.
+ * This should not be confused to mean that a node is LITERALLY in the queue `q'
+ * which often temporarily holds nodes which already have a completely solved
+ * `lowlink' value.
+ *
+ * "On the stack" really means "the low-link value is not finalized".
+ */
+  static inline int
+source_on_stack( struct search_info * s, int source )
+{
+  assert( s != NULL );
+  return s->tj_stack[source] != SEARCH_INFO_NULL;
+}
+
+
+/**
+ * Adopt the lowest low-link value reachable from a node, but ( imporant )
+ * ignore any node which is "not on the stack".
+ */
+  static void
+update_lowlink( graph_t * g, int u, int v, void * data )
+{
+  assert( data != NULL );
+  struct search_info * s = data;
+  assert( node_seen( s, v ) );
+  if ( ( s->lowlink[v] < s->lowlink[u] ) && source_on_stack( s, v ) )
+    {
+      s->lowlink[u] = s->lowlink[v];
+    }
+}
+
+
+/**
+ * This does most of the heavy lifting.
+ * It considers updating low-link values both when a previously discovered node
+ * is encountered, and after all neighbors have "finalized" their low-link.
+ */
   static void
 tarjan_dfs( struct search_info * s, int root, struct queue * q )
 {
@@ -630,9 +625,12 @@ tarjan_dfs( struct search_info * s, int root, struct queue * q )
 
   if ( _node_seen( s, cur.v ) )
     {
-      if ( source_on_stack( s, cur.v ) )
+      /* Node was already visited, but consider adopting its lowlink. */
+      if ( source_on_stack( s, cur.v )                &&
+           ( s->lowlink[cur.v] < s->lowlink[cur.u] )
+         )
         {
-          s->lowlink[cur.u] = min_i( s->lowlink[cur.u], s->lowlink[cur.v] );
+          s->lowlink[cur.u] = s->lowlink[cur.v];
         }
     }
   else
@@ -643,17 +641,14 @@ tarjan_dfs( struct search_info * s, int root, struct queue * q )
       s->reached++;
       s->tj_stack[cur.v] = 1;
 
-      /* Push all outgoing edges. */
+      /* Recursively descend into neighbors. */
       graph_foreach( s->graph, cur.v, push_edge, q );
-
-      /* Run DFS on all of them. */
       while ( cur_top < ( q->top - 1 ) )
         {
           tarjan_dfs( s, root, q );
         }
-
+      /* Now the neighbors are finalized, consider updates. */
       graph_foreach( s->graph, cur.v, update_lowlink, s );
-
     }
 
   /* Okay now you can actually "pop" since we've processed outgoing edges. */
@@ -663,23 +658,13 @@ tarjan_dfs( struct search_info * s, int root, struct queue * q )
         * root of THAT component ( not necessarily `root' argument ). */
       while ( ( ! queue_empty( q ) ) && ( q->e[q->top - 1].u == cur.u ) )
         {
-          q->top--;
-          if ( ! queue_empty( q ) )
-            {
-              q->e[q->top].u = SEARCH_INFO_NULL;
-              q->e[q->top].v = SEARCH_INFO_NULL;
-            }
+          stack_pop_edge( q );
         }
-      s->depth[cur.u] = SEARCH_INFO_NULL;
+      s->tj_stack[cur.u] = SEARCH_INFO_NULL;
     }
   else
     {
-      q->top--;
-      if ( ! queue_empty( q ) )
-        {
-          q->e[q->top].u = SEARCH_INFO_NULL;
-          q->e[q->top].v = SEARCH_INFO_NULL;
-        }
+      stack_pop_edge( q );
     }
 }
 
@@ -688,13 +673,10 @@ tarjan_dfs( struct search_info * s, int root, struct queue * q )
 tarjan( graph_t * g )
 {
   assert( g != NULL );
-
   const int n = graph_vertex_count( g );
   assert( 0 < n );
-
   struct search_info * s = search_info_create( g );
   assert( s != NULL );
-
   struct queue * q = NULL;
 
   /* Start DFS.
@@ -710,8 +692,8 @@ tarjan( graph_t * g )
           tarjan_dfs( s, i, q );
           queue_destroy( q );
           q = NULL;
-          free( s->depth );
-          s->depth = create_empty_array( n );
+          free( s->tj_stack );
+          s->tj_stack = create_empty_array( n );
         }
     }
 
