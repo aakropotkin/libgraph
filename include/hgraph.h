@@ -17,7 +17,7 @@
 typedef struct hgraph_s  hgraph_t;
 
 /** Create a new hgraph with n vertices labeled 0..n-1 and no edges */
-hgraph_t * hgraph_create( int n );
+hgraph_t * hgraph_create( char * keys, int n );
 
 /** Deep copy a `hgraph_t' */
 hgraph_t * hgraph_clone( hgraph_t * );
