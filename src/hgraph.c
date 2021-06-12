@@ -44,6 +44,11 @@ hgraph_create( char * keys, int n )
   h->keys = calloc( n, sizeof( char * ) );
   assert( h->keys != NULL );
 
+  for ( int i = 0; i < n; i++ )
+    {
+
+    }
+
   return h;
 }
 
