@@ -127,7 +127,6 @@ hlook( hgraph_t * h, char * key )
   int     rsl = hsearch_r( e, FIND, & r, h->htab );
   assert( rsl != 0 );
   assert( r != NULL );
-  assert( r->data != NULL );
   rsl = (int) ( (long) r->data );
   return rsl;
 }
@@ -145,18 +144,6 @@ hgraph_add_edge( hgraph_t * h, char * u, char * v )
 hgraph_add_weighted_edge( hgraph_t * h, char * u, char * v, int wt )
 {
   graph_add_weighted_edge( h->g, hlook( h, u ), hlook( h, v ), wt );
-}
-
-  void
-hgraph_add_edge_safe( hgraph_t * h, char * u, char * v )
-{
-  graph_add_edge_safe( h->g, hlook( h, u ), hlook( h, v ) );
-}
-
-  void
-hgraph_add_weighted_edge_safe( hgraph_t * h, char * u, char * v, int wt )
-{
-  graph_add_weighted_edge_safe( h->g, hlook( h, u ), hlook( h, v ), wt );
 }
 
   void
@@ -238,6 +225,27 @@ hg_foreach_wrap( graph_t * g, int u, int v, void * data )
   k->f( k->h, k->h->keys[u], k->h->keys[v], k->d );
 }
 
+  void
+hgraph_foreach( hgraph_t          * h,
+                char              * u,
+                hgraph_foreach_fn   f,
+                void              * data
+              )
+{
+  assert( h != NULL );
+
+  int n  = hgraph_vertex_count( h );
+  int ui = hlook( h, u );
+  assert( 0 <= ui );
+  assert( ui < n );
+
+  struct hg_fe_wrap k = { h, f, data };
+  graph_foreach( h->g, ui, hg_foreach_wrap, & k );
+}
+
+
+/* -------------------------------------------------------------------------- */
+
 /* This could probably be a `union' type with `hg_fe_wrap', but I'd rather not
  * risk any wonky undefined-behavior/portability issues that it may cause. */
 struct hg_fe_wwrap {
@@ -254,32 +262,13 @@ hg_foreach_wwrap( graph_t * g, int u, int v, int wt, void * data )
 }
 
   void
-hgraph_foreach( hgraph_t          * h,
-                char              * u,
-                hgraph_foreach_fn   f,
-                void              * data
-              )
-{
-  assert( h->g != NULL );
-
-  int n  = hgraph_vertex_count( h );
-  int ui = hlook( h, u );
-  assert( 0 <= ui );
-  assert( ui < n );
-
-  struct hg_fe_wrap k = { h, f, data };
-  graph_foreach( h->g, ui, hg_foreach_wrap, & k );
-}
-
-
-  void
 hgraph_foreach_weighted( hgraph_t            * h,
                          char                * u,
                          hgraph_w_foreach_fn   f,
                          void                * data
                        )
 {
-  assert( h->g != NULL );
+  assert( h != NULL );
 
   int n  = hgraph_vertex_count( h );
   int ui = hlook( h, u );

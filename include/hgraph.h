@@ -30,8 +30,6 @@ void hgraph_destroy( hgraph_t * );
 
 void hgraph_add_edge( hgraph_t *, char * source, char * sink );
 void hgraph_add_weighted_edge( hgraph_t *, char * source, char * sink, int wt );
-void hgraph_add_edge_safe( hgraph_t *, char * source, char * sink );
-void hgraph_add_weighted_edge_safe( hgraph_t *, char * source, char * sink, int wt );
 void hgraph_remove_edge( hgraph_t *, char * source, char * sink );
 
 

@@ -6,6 +6,8 @@
 #include "graph_test.h"
 
 
+/* ========================================================================== */
+
 #define TEST_SIZE (37)
 
 
@@ -13,9 +15,12 @@
   static void
 match_sink( graph_t * g, int source, int sink, void * data )
 {
-  assert( data && ( sink == *( (int *) data ) ) );
+  assert( data != NULL );
+  assert( sink == *( (int *) data ) );
 }
 
+
+/* -------------------------------------------------------------------------- */
 
   static int
 test_graph_clone( void )
@@ -54,64 +59,62 @@ test_graph_clone( void )
 }
 
 
+/* -------------------------------------------------------------------------- */
+
   static int
 test_graph_1( void )
 {
-  graph_t * g;
-  int i;
-  int j;
+  graph_t * g = graph_create( TEST_SIZE );
 
-  g = graph_create( TEST_SIZE );
-
+  TEST_ASSERT( g != NULL );
   TEST_ASSERT( graph_vertex_count( g ) == TEST_SIZE );
 
-  /* check it's empty */
-  for ( i = 0; i < TEST_SIZE; i++ )
+  /* Check it's empty. */
+  for ( int i = 0; i < TEST_SIZE; i++ )
     {
-      for ( j = 0; j < TEST_SIZE; j++ )
+      for ( int j = 0; j < TEST_SIZE; j++ )
         {
           TEST_ASSERT( graph_has_edge( g, i, j ) == 0 );
         }
     }
 
-  /* check it's empty again */
-  for ( i = 0; i < TEST_SIZE; i++ )
+  /* Check it's empty again, to ensure `graph_has_edge' didn't modify `g'. */
+  for ( int i = 0; i < TEST_SIZE; i++ )
     {
       TEST_ASSERT( graph_out_degree( g, i ) == 0 );
       graph_foreach( g, i, match_sink, 0 );
     }
 
-  /* check edge count */
+  /* Check edge count. */
   TEST_ASSERT( graph_edge_count( g ) == 0 );
 
-  /* fill in the diagonal */
-  for ( i = 0; i < TEST_SIZE; i++ )
+  /* Fill in the diagonal. */
+  for ( int i = 0; i < TEST_SIZE; i++ )
     {
       graph_add_edge( g, i, i );
     }
 
-  /* check */
+  /* Check */
   TEST_ASSERT( graph_edge_count( g ) == TEST_SIZE );
 
-  for ( i = 0; i < TEST_SIZE; i++ )
+  for ( int i = 0; i < TEST_SIZE; i++ )
     {
-      for ( j = 0; j < TEST_SIZE; j++ )
+      for ( int j = 0; j < TEST_SIZE; j++ )
         {
           TEST_ASSERT( graph_has_edge( g, i, j ) == ( i == j ) );
         }
     }
 
-  for (i = 0; i < TEST_SIZE; i++ )
+  for ( int i = 0; i < TEST_SIZE; i++ )
     {
-      TEST_ASSERT( graph_out_degree(g , i ) == 1 );
+      TEST_ASSERT( graph_out_degree( g , i ) == 1 );
       graph_foreach( g, i, match_sink, & i );
     }
 
-
-  /* fill in all the entries */
-  for ( i = 0; i < TEST_SIZE; i++ )
+  /* Fill in all the entries */
+  for ( int i = 0; i < TEST_SIZE; i++ )
     {
-      for ( j = 0; j < TEST_SIZE; j++ )
+      for ( int j = 0; j < TEST_SIZE; j++ )
         {
           if ( i != j )
             {
@@ -120,24 +123,27 @@ test_graph_1( void )
         }
     }
 
-  /* test they are all there */
+  /* Test they are all there */
   TEST_ASSERT( graph_edge_count( g ) == ( TEST_SIZE * TEST_SIZE ) );
 
-  for ( i = 0; i < TEST_SIZE; i++ )
+  for ( int i = 0; i < TEST_SIZE; i++ )
     {
       TEST_ASSERT( graph_out_degree( g, i ) == TEST_SIZE );
-      for ( j = 0; j < TEST_SIZE; j++ )
+      for ( int j = 0; j < TEST_SIZE; j++ )
         {
           TEST_ASSERT( graph_has_edge( g, i, j ) == 1 );
         }
     }
 
-  /* free it */
+  /* Free it */
   graph_destroy( g );
+  g = NULL;
 
   return 1;
 }
 
+
+/* -------------------------------------------------------------------------- */
 
   int
 main( int argc, char * argv[], char ** envp )
@@ -149,3 +155,10 @@ main( int argc, char * argv[], char ** envp )
 
   return rsl ? EXIT_SUCCESS : EXIT_FAILURE;
 }
+
+
+/* -------------------------------------------------------------------------- */
+
+
+
+/* ========================================================================== */
