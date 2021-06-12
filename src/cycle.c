@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "graph.h"
 #include "pq.h"
-#include "search.h"
+#include "gsearch.h"
 
 
 struct dins_q_s {

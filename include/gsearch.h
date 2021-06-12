@@ -1,5 +1,5 @@
-#ifndef _SEARCH_H
-#define _SEARCH_H
+#ifndef _GSEARCH_H
+#define _GSEARCH_H
 
 #include "graph.h"
 
@@ -126,4 +126,4 @@ int node_seen( struct search_info *, int node );
 
 /* ========================================================================== */
 
-#endif /* search.h */
+#endif /* gsearch.h */

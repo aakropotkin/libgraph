@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "graph.h"
-#include "search.h"
+#include "gsearch.h"
 #include "graph_test.h"
 
 

@@ -1,7 +1,6 @@
 
-#define _GNU_SOURCE
-#include "hgraph.h"
 #include <search.h>
+#include "hgraph.h"
 #include <stdlib.h>
 #include <assert.h>
 

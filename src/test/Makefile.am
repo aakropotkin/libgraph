@@ -1,7 +1,7 @@
 
-noinst_PROGRAMS = test_graph test_search test_shortest_path test_cycle
+noinst_PROGRAMS = test_graph test_gsearch test_shortest_path test_cycle
 
-TESTS = test_graph test_search test_shortest_path test_cycle
+TESTS = test_graph test_gsearch test_shortest_path test_cycle
 
 TEST_CFLAGS = -ggdb3
 
@@ -10,11 +10,11 @@ test_graph_CPPFLAGS = -I$(top_srcdir)/include
 test_graph_SOURCES = test_graph.c $(top_srcdir)/include/graph_test.h
 test_graph_LDADD = $(top_builddir)/src/libgraph.la
 
-test_search_CFLAGS = $(TEST_CFLAGS)
-test_search_CPPFLAGS = -I$(top_srcdir)/include
-test_search_SOURCES = test_search.c $(top_srcdir)/include/graph_test.h
-#test_search_SOURCES += ../search.c ../graph.c
-test_search_LDADD = $(top_builddir)/src/libgraph.la
+test_gsearch_CFLAGS = $(TEST_CFLAGS)
+test_gsearch_CPPFLAGS = -I$(top_srcdir)/include
+test_gsearch_SOURCES = test_gsearch.c $(top_srcdir)/include/graph_test.h
+#test_gsearch_SOURCES += ../gsearch.c ../graph.c
+test_gsearch_LDADD = $(top_builddir)/src/libgraph.la
 
 test_shortest_path_CFLAGS = $(TEST_CFLAGS)
 test_shortest_path_CPPFLAGS = -I$(top_srcdir)/include
