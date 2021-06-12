@@ -377,13 +377,11 @@ graph_foreach( graph_t * g,
                void    * data
              )
 {
-  int i = -1;
-
   assert( g != NULL );
   assert( 0 <= source );
   assert( source < g->n );
 
-  for ( i = 0; i < g->alist[source]->dout; i++ )
+  for ( int i = 0; i < g->alist[source]->dout; i++ )
     {
       f( g, source, g->alist[source]->list[i].sink, data );
     }
@@ -398,13 +396,11 @@ graph_foreach_weighted(
     void    * data
   )
 {
-  int i = -1;
-
   assert( g != NULL );
   assert( 0 <= source );
   assert( source < g->n );
 
-  for ( i = 0; i < g->alist[source]->dout; i++ )
+  for ( int i = 0; i < g->alist[source]->dout; i++ )
     {
       f( g,
          source,

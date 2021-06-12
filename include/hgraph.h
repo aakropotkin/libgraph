@@ -17,7 +17,7 @@
 typedef struct hgraph_s  hgraph_t;
 
 /** Create a new hgraph with n vertices labeled 0..n-1 and no edges */
-hgraph_t * hgraph_create( char * keys, int n );
+hgraph_t * hgraph_create( char ** keys, int n );
 
 /** Deep copy a `hgraph_t' */
 hgraph_t * hgraph_clone( hgraph_t * );
@@ -80,13 +80,13 @@ typedef void (*hgraph_w_foreach_fn)( hgraph_t *,
  * supplying data as final parameter to f
  * no particular order is guaranteed
  */
-void hgraph_foreach( hgraph_t          * g,
+void hgraph_foreach( hgraph_t          * h,
                      char              * source,
                      hgraph_foreach_fn   f,
                      void              * data
                    );
 
-void hgraph_foreach_weighted( hgraph_t            * g,
+void hgraph_foreach_weighted( hgraph_t            * h,
                               char                * source,
                               hgraph_w_foreach_fn   f,
                               void                * data
