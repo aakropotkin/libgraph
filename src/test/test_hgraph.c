@@ -32,7 +32,7 @@ match_sink( hgraph_t * h, char * v, char * u, void * data )
 
 /* -------------------------------------------------------------------------- */
 
-static char * KEYS[] = { "foo", "bar", "baz", "qux" };
+static char * KEYS[] = { "foo", "bar", "baz", "quux", "stuz" };
 static int    NKEYS  = (int) ARRAY_SIZE( KEYS );
 
   static int
@@ -124,6 +124,37 @@ test_hgraph_1( void )
   static int
 test_hgraph_clone( void )
 {
+  hgraph_t * h = hgraph_create( KEYS, NKEYS );
+  TEST_ASSERT( h != NULL );
+
+  hgraph_add_edge( h, KEYS[0], KEYS[1] );
+  hgraph_add_edge( h, KEYS[0], KEYS[2] );
+  hgraph_add_edge( h, KEYS[1], KEYS[2] );
+  hgraph_add_edge( h, KEYS[3], KEYS[4] );
+  hgraph_add_edge( h, KEYS[4], KEYS[3] );
+
+  hgraph_t * h_new = hgraph_clone( h );
+  TEST_ASSERT( h_new != NULL );
+
+  TEST_ASSERT( hgraph_has_edge( h_new, KEYS[0], KEYS[1] ) );
+  TEST_ASSERT( hgraph_has_edge( h_new, KEYS[0], KEYS[2] ) );
+  TEST_ASSERT( hgraph_has_edge( h_new, KEYS[1], KEYS[2] ) );
+  TEST_ASSERT( hgraph_has_edge( h_new, KEYS[3], KEYS[4] ) );
+  TEST_ASSERT( hgraph_has_edge( h_new, KEYS[4], KEYS[3] ) );
+
+  hgraph_destroy( h );
+  h = NULL;
+
+  TEST_ASSERT( hgraph_has_edge( h_new, KEYS[0], KEYS[1] ) );
+  TEST_ASSERT( hgraph_has_edge( h_new, KEYS[0], KEYS[2] ) );
+  TEST_ASSERT( hgraph_has_edge( h_new, KEYS[1], KEYS[2] ) );
+  TEST_ASSERT( hgraph_has_edge( h_new, KEYS[3], KEYS[4] ) );
+  TEST_ASSERT( hgraph_has_edge( h_new, KEYS[4], KEYS[3] ) );
+
+  /* Free it */
+  hgraph_destroy( h_new );
+  h_new = NULL;
+
   return 1;
 }
 
