@@ -78,18 +78,30 @@ typedef void (*hgraph_w_foreach_fn)( hgraph_t *,
  * supplying data as final parameter to f
  * no particular order is guaranteed
  */
-void hgraph_foreach( hgraph_t          * h,
+void hgraph_foreach( hgraph_t          *,
                      char              * source,
                      hgraph_foreach_fn   f,
                      void              * data
                    );
+void hgraph_foreach_edge( hgraph_t *, hgraph_foreach_fn f, void * data );
 
-void hgraph_foreach_weighted( hgraph_t            * h,
+
+void hgraph_foreach_weighted( hgraph_t            *,
                               char                * source,
                               hgraph_w_foreach_fn   f,
                               void                * data
                             );
+void hgraph_w_foreach_edge( hgraph_t *, hgraph_w_foreach_fn f, void * data );
 
+
+/* -------------------------------------------------------------------------- */
+
+typedef void (*hgraph_foreach_vert_fn)( hgraph_t   *,
+                                        const char * v,
+                                        void       * data
+                                      );
+
+void hgraph_foreach_vertex( hgraph_t *, hgraph_foreach_vert_fn f, void * data );
 
 
 /* -------------------------------------------------------------------------- */

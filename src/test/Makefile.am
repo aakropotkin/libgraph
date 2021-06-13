@@ -1,9 +1,9 @@
 
 noinst_PROGRAMS =  test_graph test_gsearch test_shortest_path test_cycle
-noinst_PROGRAMS += test_hgraph
+noinst_PROGRAMS += test_hgraph test_graph_util
 
 TESTS =  test_graph test_gsearch test_shortest_path test_cycle
-TESTS += test_hgraph
+TESTS += test_hgraph test_graph_util
 
 TEST_CFLAGS = -ggdb3
 
@@ -33,6 +33,11 @@ test_hgraph_CFLAGS = $(TEST_CFLAGS)
 test_hgraph_CPPFLAGS = -I$(top_srcdir)/include
 test_hgraph_SOURCES = test_hgraph.c $(top_srcdir)/include/graph_test.h
 test_hgraph_LDADD = $(top_builddir)/src/libgraph.la
+
+test_graph_util_CFLAGS = $(TEST_CFLAGS)
+test_graph_util_CPPFLAGS = -I$(top_srcdir)/include
+test_graph_util_SOURCES = test_graph_util.c $(top_srcdir)/include/graph_test.h
+test_graph_util_LDADD = $(top_builddir)/src/libgraph.la
 
 
 #VALGRIND = valgrind

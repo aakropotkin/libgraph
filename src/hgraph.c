@@ -243,6 +243,22 @@ hgraph_foreach( hgraph_t          * h,
   graph_foreach( h->g, ui, hg_foreach_wrap, & k );
 }
 
+  void
+hgraph_foreach_edge( hgraph_t          * h,
+                     hgraph_foreach_fn   f,
+                     void              * data
+                   )
+{
+  assert( h != NULL );
+  int n  = hgraph_vertex_count( h );
+
+  struct hg_fe_wrap k = { h, f, data };
+  for ( int i = 0; i < n; i++ )
+    {
+      graph_foreach( h->g, i, hg_foreach_wrap, & k );
+    }
+}
+
 
 /* -------------------------------------------------------------------------- */
 
@@ -277,6 +293,36 @@ hgraph_foreach_weighted( hgraph_t            * h,
 
   struct hg_fe_wwrap k = { h, f, data };
   graph_foreach_weighted( h->g, ui, hg_foreach_wwrap, & k );
+}
+
+  void
+hgraph_w_foreach_edge( hgraph_t            * h,
+                       hgraph_w_foreach_fn   f,
+                       void                * data
+                     )
+{
+  assert( h != NULL );
+  int n  = hgraph_vertex_count( h );
+
+  struct hg_fe_wwrap k = { h, f, data };
+  for ( int i = 0; i < n; i++ )
+    {
+      graph_foreach_weighted( h->g, i, hg_foreach_wwrap, & k );
+    }
+}
+
+
+/* -------------------------------------------------------------------------- */
+
+  void
+hgraph_foreach_vertex( hgraph_t * h, hgraph_foreach_vert_fn f, void * data )
+{
+  assert( h != NULL );
+  int n = hgraph_vertex_count( h );
+  for ( int i = 0; i < n; i++ )
+    {
+      f( h, (const char *) h->keys[i], data );
+    }
 }
 
 
