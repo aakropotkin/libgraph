@@ -1,4 +1,5 @@
 
+#include <errno.h>
 #include <search.h>
 #include "hgraph.h"
 #include <stdlib.h>
@@ -19,48 +20,71 @@ typedef struct hgraph_s  hgraph_t;
 /* -------------------------------------------------------------------------- */
 
   hgraph_t *
-hgraph_create( char ** keys, int n )
+hgraph_create( char ** keys, int nkeys )
 {
-  assert( 0 < n );
+  assert( 0 < nkeys );
   assert( keys != NULL );
 
   ENTRY      e   = { NULL, NULL };
   ENTRY    * r   = NULL;
   hgraph_t * h   = malloc( sizeof( hgraph_t ) );
   int        rsl = 0;
+  int        n   = 0;  /* Number of nodes, since there may be repeated keys */
   assert( h != NULL );
   h->g    = NULL;
   h->htab = NULL;
   h->keys = NULL;
 
-  h->g = graph_create( n );
-  assert( h->g != NULL );
-
   h->htab = calloc( 1, sizeof( struct hsearch_data ) );
   assert( h->htab != NULL );
-  rsl = hcreate_r( (size_t) n, h->htab );
+
+  /* Duplicate keys cause waste, but whatever. */
+  rsl = hcreate_r( (size_t) nkeys, h->htab );
   assert( rsl != 0 );
   rsl = 0;
 
-  h->keys = calloc( n, sizeof( char * ) );
+  h->keys = calloc( nkeys, sizeof( char * ) );
   assert( h->keys != NULL );
 
-  for ( int i = 0; i < n; i++ )
+  for ( int i = 0; i < nkeys; i++ )
     {
-      h->keys[i] = strdup( keys[i] );
       assert( h->keys[i] != NULL );
-      e.key = h->keys[i];
+      e.key = keys[i];
       /* Casting to long first helps to ensure that the size difference is
        * handled gracefully. */
       e.data = (void *) ( (long) i );
-      rsl = hsearch_r( e, ENTER, & r, h->htab );
-      assert( rsl != 0 );
-      rsl = 0;
-      assert( r != NULL );
+
+      /* See if key was already entered */
+      rsl = hsearch_r( e, FIND, & r, h->htab );
+      if ( rsl == 0 )  /* Key not found, add it */
+        {
+          assert( errno == ESRCH );  /* Make sure its not a different error */
+          h->keys[n] = strdup( keys[i] );  /* Copy the key. */
+          e.key = keys[n];
+          r = NULL;
+          rsl = hsearch_r( e, ENTER, & r, h->htab );
+          assert( rsl != 0 );
+          rsl = 0;
+          assert( r != NULL );
+          n++;
+        }
+      else  /* Key found, skip it */
+        {
+          assert( r != NULL );
+        }
       r      = NULL;
       e.key  = NULL;
       e.data = NULL;
     }
+
+  /* Shrink `keys' to correct size */
+  if ( n != nkeys )
+    {
+      h->keys = realloc( h->keys, sizeof( char * ) * n );
+      assert( h->keys != NULL );
+    }
+  h->g = graph_create( n );
+  assert( h->g != NULL );
 
   return h;
 }
