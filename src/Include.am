@@ -1,0 +1,6 @@
+
+lib_LTLIBRARIES = %D%/libgraph.la
+
+%C%_libgraph_la_SOURCES =  %D%/graph.c %D%/pq.c %D%/gsearch.c %D%/dijkstra.c
+%C%_libgraph_la_SOURCES += %D%/shortest_path.c %D%/cycle.c %D%/hgraph.c
+%C%_libgraph_la_SOURCES += %D%/graph_util.c

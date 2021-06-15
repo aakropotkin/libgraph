@@ -1,0 +1,2 @@
+include_HEADERS = %D%/graph.h %D%/gsearch.h %D%/pq.h %D%/dijkstra.h
+include_HEADERS += %D%/shortest_path.h %D%/cycle.h %D%/hgraph.h %D%/graph_util.h

@@ -383,7 +383,6 @@ test_tarjan( void )
 {
   graph_t * g = graph_create( 7 );
   int     * t = NULL;
-  const int n = graph_vertex_count( g );
 
   graph_add_edge( g, 0, 1 );
   graph_add_edge( g, 1, 2 );

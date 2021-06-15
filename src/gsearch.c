@@ -534,23 +534,6 @@ graph_is_strongly_connected( graph_t * g )
 
 /* -------------------------------------------------------------------------- */
 
-  static int
-array_contains( int * hay, int needle, int len )
-{
-  assert( hay != NULL );
-  for ( int i = 0; i < len; i++ )
-    {
-      if ( hay[i] == needle )
-        {
-          return 1;
-        }
-    }
-  return 0;
-}
-
-
-/* -------------------------------------------------------------------------- */
-
 /**
  * Assign Strongly Connected Component labels to each vertex.
  * Tarjan in a nushell:

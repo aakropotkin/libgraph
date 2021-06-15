@@ -1,0 +1,40 @@
+
+noinst_PROGRAMS =  %D%/test_graph %D%/test_gsearch %D%/test_shortest_path
+noinst_PROGRAMS += %D%/test_cycle %D%/test_hgraph %D%/test_graph_util
+
+TESTS =  %D%/test_graph %D%/test_gsearch %D%/test_shortest_path
+TESTS += %D%/test_cycle %D%/test_hgraph %D%/test_graph_util
+
+%C%_test_graph_SOURCES = %D%/test_graph.c $(top_srcdir)/include/graph_test.h
+%C%_test_graph_LDADD = $(top_builddir)/src/libgraph.la
+
+%C%_test_gsearch_SOURCES = %D%/test_gsearch.c $(top_srcdir)/include/graph_test.h
+%C%_test_gsearch_LDADD = $(top_builddir)/src/libgraph.la
+
+%C%_test_shortest_path_SOURCES = %D%/test_shortest_path.c
+%C%_test_shortest_path_SOURCES += $(top_srcdir)/include/graph_test.h
+%C%_test_shortest_path_LDADD = $(top_builddir)/src/libgraph.la
+
+%C%_test_cycle_SOURCES = %D%/test_cycle.c $(top_srcdir)/include/graph_test.h
+%C%_test_cycle_LDADD = $(top_builddir)/src/libgraph.la
+
+%C%_test_hgraph_SOURCES = %D%/test_hgraph.c $(top_srcdir)/include/graph_test.h
+%C%_test_hgraph_LDADD = $(top_builddir)/src/libgraph.la
+
+%C%_test_graph_util_SOURCES = %D%/test_graph_util.c
+%C%_test_graph_util_SOURCES += $(top_srcdir)/include/graph_test.h
+%C%_test_graph_util_LDADD = $(top_builddir)/src/libgraph.la
+
+
+#VALGRIND = valgrind
+#VGMINFLAGS = --tool=memcheck --leak-check=yes
+#VGFULLFLAGS = --tool=memcheck --leak-check=full --show-leak-kinds=all -s
+#VGFLAGS = $(VGFULLFLAGS)
+#
+#test: test_graph test_search test_shortest_path
+#	./test_shortest_path
+#	$(VALGRIND) $(VGFLAGS) ./test_shortest_path
+#	./test_graph
+#	$(VALGRIND) $(VGFLAGS) ./test_graph
+#	./test_search
+#	$(VALGRIND) $(VGFLAGS) ./test_search
