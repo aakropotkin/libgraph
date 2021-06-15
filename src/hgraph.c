@@ -48,11 +48,11 @@ hgraph_create( char ** keys, int nkeys )
 
   for ( int i = 0; i < nkeys; i++ )
     {
-      assert( h->keys[i] != NULL );
+      assert( keys[i] != NULL );
       e.key = keys[i];
       /* Casting to long first helps to ensure that the size difference is
        * handled gracefully. */
-      e.data = (void *) ( (long) i );
+      e.data = (void *) ( (long) n );
 
       /* See if key was already entered */
       rsl = hsearch_r( e, FIND, & r, h->htab );
@@ -60,7 +60,7 @@ hgraph_create( char ** keys, int nkeys )
         {
           assert( errno == ESRCH );  /* Make sure its not a different error */
           h->keys[n] = strdup( keys[i] );  /* Copy the key. */
-          e.key = keys[n];
+          e.key = h->keys[n];
           r = NULL;
           rsl = hsearch_r( e, ENTER, & r, h->htab );
           assert( rsl != 0 );
