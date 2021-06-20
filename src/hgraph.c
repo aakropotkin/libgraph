@@ -352,6 +352,34 @@ hgraph_foreach_vertex( hgraph_t * h, hgraph_foreach_vert_fn f, void * data )
 
 /* -------------------------------------------------------------------------- */
 
+enum parse_edges_style {
+  PES_SPACE,
+  PES_DOT
+};
+
+struct edge_pair_s {
+  char * u;
+  char * v;
+};
+
+
+  static void
+parse_edge_pair( const char             * line,
+                 struct edge_pair_s     * e,
+                 enum parse_edges_style   style
+               )
+{
+  assert( line != NULL );
+  assert( e != NULL );
+  size_t len = strcspn( line, " \t" );
+  e->u = strndup( line, len );
+  assert( e->u != NULL );
+}
+
+
+
+/* -------------------------------------------------------------------------- */
+
 
 
 /* ========================================================================== */
