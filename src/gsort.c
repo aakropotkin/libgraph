@@ -112,7 +112,7 @@ htarjan_get_scss( struct htarjan_info * hi, const char * u )
 {
   assert( hi != NULL );
   assert( u != NULL );
-  ENTRY e = { u, NULL };
+  ENTRY e = { (char *) u, NULL };
   ENTRY * r = NULL;
   int rsl = hsearch_r( e, FIND, & r, hi->htab );
   assert( rsl == 0 );

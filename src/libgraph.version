@@ -1,0 +1,71 @@
+GRAPH_1.0 {
+
+  global:
+    bellman_ford;
+    bfs;
+    count_subgraphs;
+    dfs;
+    dijkstra;
+    floyd_warshall;
+    tarjan;
+    
+    graph_add_edge;
+    graph_add_edge_safe;
+    graph_add_edge_weighted_safe;
+    graph_add_weighted_edge;
+    graph_clone;
+    graph_create;
+    graph_destroy;
+    graph_edge_count;
+    graph_edge_weight;
+    graph_foreach;
+    graph_foreach_weighted;
+    graph_has_cycle;
+    graph_has_edge;
+    graph_in_degree;
+    graph_is_connected;
+    graph_is_strongly_connected;
+    graph_out_degree;
+    graph_print_cycles;
+    graph_remove_edge;
+    graph_vertex_count;
+    
+    hgraph_add_edge;
+    hgraph_add_weighted_edge;
+    hgraph_clone;
+    hgraph_create;
+    hgraph_destroy;
+    hgraph_edge_count;
+    hgraph_edge_weight;
+    hgraph_foreach;
+    hgraph_foreach_edge;
+    hgraph_foreach_vertex;
+    hgraph_foreach_weighted;
+    hgraph_fprint;
+    hgraph_fprint_dot;
+    hgraph_fread;
+    hgraph_get_keys;
+    hgraph_has_edge;
+    hgraph_in_degree;
+    hgraph_out_degree;
+    hgraph_parse;
+    hgraph_remove_edge;
+    hgraph_vertex_count;
+    hgraph_w_foreach_edge;
+    hgraph_write;
+    hgraph_write_dot;
+    
+    node_seen;
+    mark_reachable;
+    
+    mark_same_subgraph;
+    mark_subgraph_groups;
+    split_subgraphs;
+    
+    search_info_create;
+    search_info_destroy;
+
+
+  local: *;
+
+};

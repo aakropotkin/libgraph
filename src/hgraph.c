@@ -433,6 +433,7 @@ parse_edge_pair( const char * line, enum parse_edges_style style )
 
 /* -------------------------------------------------------------------------- */
 
+#if 0
   void
 print_parsed_edges( const char * const lines[], int nlines )
 {
@@ -449,6 +450,7 @@ print_parsed_edges( const char * const lines[], int nlines )
       e.v = NULL;
     }
 }
+#endif  /* 0 */
 
 
 /* -------------------------------------------------------------------------- */

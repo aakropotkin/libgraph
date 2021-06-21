@@ -161,24 +161,6 @@ test_hgraph_clone( void )
 
 /* -------------------------------------------------------------------------- */
 
-static const char * EDGE_LINES[] = {
-  "foo -> bar; ",
-  "bar -- baz;",
-  "bar\t<--> qux;"
-};
-
-static const int NEDGE_LINES = (int) ARRAY_SIZE( EDGE_LINES );
-
-  static int
-test_print_parsed_edges( void )
-{
-  print_parsed_edges( EDGE_LINES, NEDGE_LINES );
-  return 1;
-}
-
-
-/* -------------------------------------------------------------------------- */
-
   static int
 test_hgraph_fread( void )
 {
@@ -207,7 +189,6 @@ main( int argc, char * argv[], char ** envp )
 
   RUN_TEST( rsl, test_hgraph_1 );
   RUN_TEST( rsl, test_hgraph_clone );
-  RUN_TEST( rsl, test_print_parsed_edges );
   RUN_TEST( rsl, test_hgraph_fread );
 
   return rsl ? EXIT_SUCCESS : EXIT_FAILURE;

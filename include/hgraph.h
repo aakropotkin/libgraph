@@ -122,11 +122,6 @@ char ** hgraph_get_keys( hgraph_t * h );
 
 /* -------------------------------------------------------------------------- */
 
-void print_parsed_edges( const char * const lines[], int nlines );
-
-
-/* -------------------------------------------------------------------------- */
-
 hgraph_t * hgraph_parse( FILE * stream );
 hgraph_t * hgraph_fread( const char * pathname );
 
