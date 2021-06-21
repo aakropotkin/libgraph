@@ -169,10 +169,31 @@ static const char * EDGE_LINES[] = {
 
 static const int NEDGE_LINES = (int) ARRAY_SIZE( EDGE_LINES );
 
-  int
+  static int
 test_print_parsed_edges( void )
 {
   print_parsed_edges( EDGE_LINES, NEDGE_LINES );
+  return 1;
+}
+
+
+/* -------------------------------------------------------------------------- */
+
+  static int
+test_hgraph_fread( void )
+{
+  /* foo bar
+   * bar baz
+   * baz qux */
+  static const char * test_name = TEST_SRCDIR "/test_hgraph_fread.txt";
+  hgraph_t * h = hgraph_fread( test_name );
+  TEST_ASSERT( hgraph_edge_count( h ) == 3 );
+  TEST_ASSERT( hgraph_vertex_count( h ) == 4 );
+  TEST_ASSERT( hgraph_has_edge( h, "foo", "bar" ) );
+  TEST_ASSERT( hgraph_has_edge( h, "bar", "baz" ) );
+  TEST_ASSERT( hgraph_has_edge( h, "baz", "qux" ) );
+  hgraph_destroy( h );
+  h = NULL;
   return 1;
 }
 
@@ -187,6 +208,7 @@ main( int argc, char * argv[], char ** envp )
   RUN_TEST( rsl, test_hgraph_1 );
   RUN_TEST( rsl, test_hgraph_clone );
   RUN_TEST( rsl, test_print_parsed_edges );
+  RUN_TEST( rsl, test_hgraph_fread );
 
   return rsl ? EXIT_SUCCESS : EXIT_FAILURE;
 }

@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
-#include <stdio.h>
 
 
 /* ========================================================================== */
@@ -489,7 +488,7 @@ hgraph_parse( FILE * stream )
 
   /* This is going to be super wasteful on space, but making multiple scans
    * probably isn't worth the time. */
-  rsl = hcreate_r( nlines * 2, h->tab );
+  rsl = hcreate_r( nlines * 2, h->htab );
   assert( rsl != 0 );
   rsl = 0;
 
