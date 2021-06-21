@@ -107,6 +107,21 @@ void hgraph_foreach_vertex( hgraph_t *, hgraph_foreach_vert_fn f, void * data );
 
 /* -------------------------------------------------------------------------- */
 
+/**
+ * This duplicates the `hgraph_t' internal key list in the exact order of their
+ * associated `graph_t' indexes.
+ * This should be used sparingly, perhaps for extracting the pruned list of keys
+ * created by `hgraph_parse', or for adding `hgraph_t' support to functions that
+ * normally only support `graph_t'.
+ *
+ * The caller must `free' each key, as well as the list of strings itself.
+ * The number of elements may be found with `hgraph_vertex_count'.
+ */
+char ** hgraph_get_keys( hgraph_t * h );
+
+
+/* -------------------------------------------------------------------------- */
+
 void print_parsed_edges( const char * const lines[], int nlines );
 
 

@@ -352,6 +352,24 @@ hgraph_foreach_vertex( hgraph_t * h, hgraph_foreach_vert_fn f, void * data )
 
 /* -------------------------------------------------------------------------- */
 
+  char **
+hgraph_get_keys( hgraph_t * h )
+{
+  assert( h != NULL );
+  int n = hgraph_vertex_count( h );
+  char ** keys = malloc( sizeof( char * ) * n );
+  assert( keys != NULL );
+  for ( int i = 0; i < n; i++ )
+    {
+      keys[i] = strdup( h->keys[i] );
+      assert( keys[i] != NULL );
+    }
+  return keys;
+}
+
+
+/* -------------------------------------------------------------------------- */
+
   static inline char *
 strpcbrk( const char * s, const char * reject )
 {
@@ -376,7 +394,7 @@ get_pes_delim( enum parse_edges_style style )
     {
       case PES_SPACE:  return hgraph_edge_delim;     break;
       case PES_DOT:    return hgraph_edge_delim_dot; break;
-      default:         assert( 0 ); return NULL;      break;
+      default:         assert( 0 ); return NULL;     break;
     }
   assert( 0 );
   return NULL;
