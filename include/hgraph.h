@@ -6,6 +6,8 @@
 
 #include "graph.h"
 
+struct FILE;
+
 
 /* -------------------------------------------------------------------------- */
 
@@ -107,6 +109,12 @@ void hgraph_foreach_vertex( hgraph_t *, hgraph_foreach_vert_fn f, void * data );
 /* -------------------------------------------------------------------------- */
 
 void print_parsed_edges( const char * const lines[], int nlines );
+
+
+/* -------------------------------------------------------------------------- */
+
+hgraph_t * hgraph_parse( FILE * stream );
+hgraph_t * hgraph_fread( const char * pathname );
 
 
 /* -------------------------------------------------------------------------- */

@@ -367,8 +367,21 @@ enum parse_edges_style {
   PES_DOT
 };
 
-static const char * hgraph_edge_delim     = " \t\n";
-static const char * hgraph_edge_delim_dot = " \t\n;:<>-{}[]()=";
+static const char * hgraph_edge_delim     = " \t\n'\"";
+static const char * hgraph_edge_delim_dot = " \t\n;:<>-{}[]()='\"";
+
+  static inline const char *
+get_pes_delim( enum parse_edges_style style )
+{
+  switch( style )
+    {
+      case PES_SPACE:  return hgraph_edge_delim;     break;
+      case PES_DOT:    return hgraph_edge_delim_dot; break;
+      default:         assert( 0 ); return NULL;      break;
+    }
+  assert( 0 );
+  return NULL;
+}
 
 struct edge_pair_s {
   char * u;
@@ -381,14 +394,7 @@ parse_edge_pair( const char * line, enum parse_edges_style style )
 {
   assert( line != NULL );
   struct edge_pair_s e = { NULL, NULL };
-  const char * delim;
-
-  switch( style )
-    {
-      case PES_SPACE:  delim = hgraph_edge_delim;     break;
-      case PES_DOT:    delim = hgraph_edge_delim_dot; break;
-      default:         assert( 0 );                   break;
-    }
+  const char * delim = get_pes_delim( style );
 
   char * i = strpcbrk( line, delim );
   assert( i != NULL );
@@ -425,6 +431,172 @@ print_parsed_edges( const char * const lines[], int nlines )
       free( e.v );
       e.v = NULL;
     }
+}
+
+
+/* -------------------------------------------------------------------------- */
+
+  static size_t
+fcount_lines( FILE * stream )
+{
+  size_t n = 0;
+  int    c = '\0';
+  assert( stream != NULL );
+
+  while ( ( c = getc( stream ) ) != EOF )
+    {
+      if ( c == '\n' )
+        {
+          n++;
+        }
+    }
+
+  rewind( stream );
+  return n;
+}
+
+
+/* -------------------------------------------------------------------------- */
+
+struct edge {
+  int u;
+  int v;
+};
+
+  hgraph_t *
+hgraph_parse( FILE * stream )
+{
+  assert( stream != NULL );
+  char         * line   = NULL;
+  size_t         len    = 0;
+  ssize_t        nread  = 0;
+  const size_t   nlines = fcount_lines( stream );
+  ENTRY          e      = { NULL, NULL };
+  ENTRY        * r      = NULL;
+  hgraph_t     * h      = malloc( sizeof( hgraph_t ) );
+  int            n      = 0;  /* Key count */
+  int            rsl    = 0;
+  struct edge_pair_s tedge = { NULL, NULL };
+  struct edge * iedges = calloc( nlines, sizeof( struct edge ) );
+
+  assert( h != NULL );
+  h->g    = NULL;
+  h->htab = NULL;
+  h->keys = NULL;
+
+  h->htab = calloc( 1, sizeof( struct hsearch_data ) );
+  assert( h->htab != NULL );
+
+  /* This is going to be super wasteful on space, but making multiple scans
+   * probably isn't worth the time. */
+  rsl = hcreate_r( nlines * 2, h->tab );
+  assert( rsl != 0 );
+  rsl = 0;
+
+  h->keys = calloc( nlines * 2, sizeof( char * ) );
+  assert( h->keys != NULL );
+
+  for ( int i = 0; i < nlines; i++ )
+    {
+      nread = getline( & line, & len, stream );
+      assert( 0 < nread );
+      assert( line != NULL );
+      tedge = parse_edge_pair( line, PES_SPACE );
+
+      e.key = tedge.u;
+      e.data = (void *) ( (long) n );
+
+      /* See if the key was already entered */
+      rsl = hsearch_r( e, FIND, & r, h->htab );
+      if ( rsl == 0 )  /* Key not found, add it */
+        {
+          assert( errno = ESRCH );  /* Make sure its not a different error */
+          h->keys[n] = e.key;
+          r = NULL;
+          rsl = hsearch_r( e, ENTER, & r, h->htab );
+          assert( rsl != 0 );
+          assert( r != NULL );
+          n++;
+        }
+      else
+        {
+          assert( r != NULL );
+          free( tedge.u );
+        }
+      tedge.u = NULL;
+      iedges[i].u = (int) ( (long) r->data );
+      rsl = 0;
+      r   = NULL;
+
+      e.key = tedge.v;
+      e.data = (void *) ( (long) n );
+
+      /* See if the key was already entered */
+      rsl = hsearch_r( e, FIND, & r, h->htab );
+      if ( rsl == 0 )  /* Key not found, add it */
+        {
+          assert( errno = ESRCH );  /* Make sure its not a different error */
+          h->keys[n] = e.key;
+          r = NULL;
+          rsl = hsearch_r( e, ENTER, & r, h->htab );
+          assert( rsl != 0 );
+          assert( r != NULL );
+          n++;
+        }
+      else
+        {
+          assert( r != NULL );
+          free( tedge.v );
+        }
+      tedge.v = NULL;
+      iedges[i].v = (int) ( (long) r->data );
+      rsl    = 0;
+      r      = NULL;
+      e.key  = NULL;
+      e.data = NULL;
+
+      free( line );
+      line = NULL;
+      len = 0;
+      nread = 0;
+    }
+
+  /* Shrink `keys' to correct size */
+  if ( n != ( nlines * 2 ) )
+    {
+      h->keys = realloc( h->keys, sizeof( char * ) * n );
+      assert( h->keys != NULL );
+    }
+  h->g = graph_create( n );
+  assert( h->g != NULL );
+
+  for ( int i = 0; i < nlines; i++ )
+    {
+      graph_add_edge_safe( h->g, iedges[i].u, iedges[i].v );
+    }
+
+  free( iedges );
+  iedges = NULL;
+
+  return h;
+}
+
+
+/* -------------------------------------------------------------------------- */
+
+  hgraph_t *
+hgraph_fread( const char * pathname )
+{
+  assert( pathname != NULL );
+  hgraph_t * h      = NULL;
+  FILE     * stream = fopen( pathname, "r" );
+  int        rsl    = 0;
+  assert( stream != NULL );
+  h = hgraph_parse( stream );
+  rsl = fclose( stream );
+  stream = NULL;
+  assert( rsl == 0 );
+  return h;
 }
 
 
