@@ -527,7 +527,7 @@ hgraph_parse( FILE * stream )
       rsl = hsearch_r( e, FIND, & r, h->htab );
       if ( rsl == 0 )  /* Key not found, add it */
         {
-          assert( errno = ESRCH );  /* Make sure its not a different error */
+          assert( errno == ESRCH );  /* Make sure its not a different error */
           h->keys[n] = e.key;
           r = NULL;
           rsl = hsearch_r( e, ENTER, & r, h->htab );
@@ -552,7 +552,7 @@ hgraph_parse( FILE * stream )
       rsl = hsearch_r( e, FIND, & r, h->htab );
       if ( rsl == 0 )  /* Key not found, add it */
         {
-          assert( errno = ESRCH );  /* Make sure its not a different error */
+          assert( errno == ESRCH );  /* Make sure its not a different error */
           h->keys[n] = e.key;
           r = NULL;
           rsl = hsearch_r( e, ENTER, & r, h->htab );

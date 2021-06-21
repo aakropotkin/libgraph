@@ -5,6 +5,7 @@
 #include "gsearch.h"
 #include "graph_util.h"
 #include <limits.h>
+#include <assert.h>
 
 
 /* ========================================================================== */
@@ -69,6 +70,22 @@ main( int argc, char * argv[], char ** envp )
 
   h = hgraph_fread( pathname );
   hscss = hgraph_tarjan( h );
+
+
+
+
+  /* Cleanup */
+  for ( int i = 0; i < hscss->nkeys; i++ )
+    {
+      free( hscss->keys[i] );
+      hscss->keys = NULL;
+    }
+  free( hscss->keys );
+  hscss->keys = NULL;
+  free( hscss->scss );
+  hscss->scss = NULL;
+  free( hscss );
+  hscss = NULL;
 
   return EXIT_SUCCESS;
 }
