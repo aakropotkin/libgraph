@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
+#include <stdio.h>
 
 
 /* ========================================================================== */
@@ -352,10 +353,22 @@ hgraph_foreach_vertex( hgraph_t * h, hgraph_foreach_vert_fn f, void * data )
 
 /* -------------------------------------------------------------------------- */
 
+  static inline char *
+strpcbrk( const char * s, const char * reject )
+{
+  return ( (char *) s ) + strspn( s, reject );
+}
+
+
+/* -------------------------------------------------------------------------- */
+
 enum parse_edges_style {
   PES_SPACE,
   PES_DOT
 };
+
+static const char * hgraph_edge_delim     = " \t\n";
+static const char * hgraph_edge_delim_dot = " \t\n;:<>-{}[]()=";
 
 struct edge_pair_s {
   char * u;
@@ -363,19 +376,56 @@ struct edge_pair_s {
 };
 
 
-  static void
-parse_edge_pair( const char             * line,
-                 struct edge_pair_s     * e,
-                 enum parse_edges_style   style
-               )
+  static struct edge_pair_s
+parse_edge_pair( const char * line, enum parse_edges_style style )
 {
   assert( line != NULL );
-  assert( e != NULL );
-  size_t len = strcspn( line, " \t" );
-  e->u = strndup( line, len );
-  assert( e->u != NULL );
+  struct edge_pair_s e = { NULL, NULL };
+  const char * delim;
+
+  switch( style )
+    {
+      case PES_SPACE:  delim = hgraph_edge_delim;     break;
+      case PES_DOT:    delim = hgraph_edge_delim_dot; break;
+      default:         assert( 0 );                   break;
+    }
+
+  char * i = strpcbrk( line, delim );
+  assert( i != NULL );
+  size_t len = strcspn( i, delim );
+
+  e.u = strndup( i, len );
+  assert( e.u != NULL );
+
+  i = strpcbrk( i + len + 1, delim );
+  assert( i != NULL );
+  len = strcspn( i, delim );
+
+  e.v = strndup( i, len );
+  assert( e.v != NULL );
+
+  return e;
 }
 
+
+/* -------------------------------------------------------------------------- */
+
+  void
+print_parsed_edges( const char * const lines[], int nlines )
+{
+  assert( lines != NULL );
+  struct edge_pair_s e = { NULL, NULL };
+  for ( int i = 0; i < nlines; i ++ )
+    {
+      //e = parse_edge_pair( lines[i], PES_SPACE );
+      e = parse_edge_pair( lines[i], PES_DOT );
+      printf( "( %s, %s )\n", e.u, e.v );
+      free( e.u );
+      e.u = NULL;
+      free( e.v );
+      e.v = NULL;
+    }
+}
 
 
 /* -------------------------------------------------------------------------- */

@@ -64,9 +64,9 @@ Z	  [zZ]
                   return( T_LBRACKET ); }
 "]"             { count( void );
                   return( T_RBRACKET ); }
-"( "             { count( void );
+"("             { count( void );
                   return( T_LPAREN ); }
-" )"             { count( void );
+")"             { count( void );
                   return( T_RPAREN ); }
 "{"             { count( void );
                   return( T_LBRACE ); }

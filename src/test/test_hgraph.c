@@ -32,8 +32,8 @@ match_sink( hgraph_t * h, char * v, char * u, void * data )
 
 /* -------------------------------------------------------------------------- */
 
-static char * KEYS[] = { "foo", "bar", "baz", "quux", "stuz" };
-static int    NKEYS  = (int) ARRAY_SIZE( KEYS );
+static char *    KEYS[] = { "foo", "bar", "baz", "quux", "stuz" };
+static const int NKEYS  = (int) ARRAY_SIZE( KEYS );
 
   static int
 test_hgraph_1( void )
@@ -161,6 +161,24 @@ test_hgraph_clone( void )
 
 /* -------------------------------------------------------------------------- */
 
+static const char * EDGE_LINES[] = {
+  "foo -> bar; ",
+  "bar -- baz;",
+  "bar\t<--> qux;"
+};
+
+static const int NEDGE_LINES = (int) ARRAY_SIZE( EDGE_LINES );
+
+  int
+test_print_parsed_edges( void )
+{
+  print_parsed_edges( EDGE_LINES, NEDGE_LINES );
+  return 1;
+}
+
+
+/* -------------------------------------------------------------------------- */
+
   int
 main( int argc, char * argv[], char ** envp )
 {
@@ -168,6 +186,7 @@ main( int argc, char * argv[], char ** envp )
 
   RUN_TEST( rsl, test_hgraph_1 );
   RUN_TEST( rsl, test_hgraph_clone );
+  RUN_TEST( rsl, test_print_parsed_edges );
 
   return rsl ? EXIT_SUCCESS : EXIT_FAILURE;
 }
