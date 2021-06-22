@@ -265,14 +265,14 @@ generic_search( struct search_info * r, int root, enum search_kind_e sk )
 
 
   void
-dfs( struct search_info * results, int root )
+gsearch_dfs( struct search_info * results, int root )
 {
   generic_search( results, root, SK_DFS );
 }
 
 
   void
-bfs( struct search_info * results, int root )
+gsearch_bfs( struct search_info * results, int root )
 {
   generic_search( results, root, SK_BFS );
 }
@@ -281,7 +281,7 @@ bfs( struct search_info * results, int root )
 /* -------------------------------------------------------------------------- */
 
   int
-count_subgraphs( graph_t * g )
+graph_count_subgraphs( graph_t * g )
 {
   assert( g != NULL );
   int count = 0;
@@ -298,7 +298,7 @@ count_subgraphs( graph_t * g )
           }
       }
     count++;
-    bfs( s, i );
+    gsearch_bfs( s, i );
   } while( s->reached < n );
 
   search_info_destroy( s );
@@ -331,17 +331,17 @@ clone_undirected( graph_t * g, int source, int sink, int weight, void * new_g )
 /* -------------------------------------------------------------------------- */
 
   graph_t **
-split_subgraphs( graph_t * g, int * num_subgraphs )
+graph_split_subgraphs( graph_t * g, int * num_subgraphs )
 {
   assert( g != NULL );
   assert( num_subgraphs != NULL );
-  *num_subgraphs = count_subgraphs( g );
+  *num_subgraphs = graph_count_subgraphs( g );
 
   const int n = graph_vertex_count( g );
   assert( 0 < n );
   graph_t ** subgraphs = calloc( (size_t) *num_subgraphs, sizeof( graph_t * ) );
   assert( subgraphs != NULL );
-  int * groups = mark_subgraph_groups( g );
+  int * groups = graph_mark_subgraph_groups( g );
   assert( groups != NULL );
 
   for ( int i = 0; i < *num_subgraphs; i++ )
@@ -364,7 +364,7 @@ split_subgraphs( graph_t * g, int * num_subgraphs )
 /* -------------------------------------------------------------------------- */
 
   char *
-mark_reachable( graph_t * g, int source )
+graph_mark_reachable( graph_t * g, int source )
 {
   assert( g != NULL );
   assert( 0 <= source );
@@ -373,7 +373,7 @@ mark_reachable( graph_t * g, int source )
   assert( r != NULL );
   struct search_info * s = search_info_create( g );
 
-  bfs( s, source );
+  gsearch_bfs( s, source );
 
   for ( int i = 0; i < n; i++ )
     {
@@ -390,7 +390,7 @@ mark_reachable( graph_t * g, int source )
 /* -------------------------------------------------------------------------- */
 
   char *
-mark_same_subgraph( graph_t * g, int source )
+graph_mark_same_subgraph( graph_t * g, int source )
 {
   assert( g != NULL );
   assert( 0 <= source );
@@ -413,7 +413,7 @@ mark_same_subgraph( graph_t * g, int source )
   s = search_info_create( g_new );
   assert( s != NULL );
 
-  bfs( s, source );
+  gsearch_bfs( s, source );
 
   for ( int i = 0; i < n; i++ )
     {
@@ -432,7 +432,7 @@ mark_same_subgraph( graph_t * g, int source )
 /* -------------------------------------------------------------------------- */
 
   int *
-mark_subgraph_groups( graph_t * g )
+graph_mark_subgraph_groups( graph_t * g )
 {
   assert( g != NULL );
   const int n = graph_vertex_count( g );
@@ -453,7 +453,7 @@ mark_subgraph_groups( graph_t * g )
         }
 
       /* Find other subgraph members. */
-      group = mark_same_subgraph( g, i );
+      group = graph_mark_same_subgraph( g, i );
       assert( group != NULL );
 
       /* Mark generation */
@@ -491,7 +491,7 @@ graph_is_connected( graph_t * g )
     {
       if ( s->time[i] == SEARCH_INFO_NULL )
         {
-          dfs( s, i );
+          gsearch_dfs( s, i );
           if ( n <= s->reached )
             {
               search_info_destroy( s );
@@ -516,7 +516,7 @@ graph_is_strongly_connected( graph_t * g )
   assert( g != NULL );
   const int n = graph_vertex_count( g );
   assert( 0 < n );
-  int * scss = tarjan( g );
+  int * scss = graph_tarjan( g );
   for ( int i = 1; i < n; i++ )
     {
       if ( scss[i - 1] != scss[i] )
@@ -653,7 +653,7 @@ tarjan_dfs( struct search_info * s, int root, struct queue * q )
 
 
   int *
-tarjan( graph_t * g )
+graph_tarjan( graph_t * g )
 {
   assert( g != NULL );
   const int n = graph_vertex_count( g );

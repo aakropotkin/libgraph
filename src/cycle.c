@@ -172,9 +172,9 @@ graph_print_cycles( graph_t * g )
 
   //int * groups  = mark_subgraph_groups( dg.g_new );
   /* FIXME */
-  int * groups = tarjan( dg.g_new );
+  int * groups = graph_tarjan( dg.g_new );
   assert( groups != NULL );
-  int   ngroups = count_subgraphs( dg.g_new );
+  int   ngroups = graph_count_subgraphs( dg.g_new );
   int * group_pop = calloc( (size_t) ngroups, sizeof( int ) );
   assert( group_pop != NULL );
 

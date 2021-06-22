@@ -1,7 +1,11 @@
+
 #include "pq.h"
 #include "dijkstra.h"
 #include <assert.h>
 #include <values.h>
+
+
+/* ========================================================================== */
 
 
 /** internal edge representation for dijkstra */
@@ -12,12 +16,16 @@ struct pq_elt {
 };
 
 
+/* -------------------------------------------------------------------------- */
+
   static int
 pq_elt_cmp( const void * a, const void * b )
 {
   return ( (const struct pq_elt *) a )->d - ( (const struct pq_elt *) b )->d;
 }
 
+
+/* -------------------------------------------------------------------------- */
 
 struct push_data {
   pq_t * pq;
@@ -40,6 +48,8 @@ push( graph_t * g, int u, int v, int wt, void * data )
   pq_insert( d->pq, & e );
 }
 
+
+/* -------------------------------------------------------------------------- */
 
   void
 dijkstra( graph_t * g, int source, int * dist, int * parent )
@@ -71,9 +81,9 @@ dijkstra( graph_t * g, int source, int * dist, int * parent )
         }
     }
 
-  /* push (source, source, 0)
-   * this will get things started with parent[source] == source
-   * and dist[source] == 0 */
+  /* `push( source, source, 0 )''
+   * this will get things started with `parent[source] == source'
+   * and `dist[source] == 0' */
   push( g, source, source, ( - MAXINT ), & data );
 
   while ( ! pq_is_empty( data.pq ) )
@@ -95,3 +105,10 @@ dijkstra( graph_t * g, int source, int * dist, int * parent )
 
   pq_destroy( data.pq );
 }
+
+
+/* -------------------------------------------------------------------------- */
+
+
+
+/* ========================================================================== */

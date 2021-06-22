@@ -1,14 +1,13 @@
 GRAPH_1.0 {
 
   global:
+    gsearch_bfs;
+    gsearch_dfs;
+    graph_tarjan;
     bellman_ford;
-    bfs;
-    count_subgraphs;
-    dfs;
     dijkstra;
     floyd_warshall;
-    tarjan;
-    
+
     graph_add_edge;
     graph_add_edge_safe;
     graph_add_edge_weighted_safe;
@@ -29,6 +28,13 @@ GRAPH_1.0 {
     graph_print_cycles;
     graph_remove_edge;
     graph_vertex_count;
+    graph_count_subgraphs;
+    graph_node_seen;
+    graph_mark_reachable;
+    graph_mark_same_subgraph;
+    graph_mark_subgraph_groups;
+    graph_split_subgraphs;
+
     
     hgraph_add_edge;
     hgraph_add_weighted_edge;
@@ -54,13 +60,6 @@ GRAPH_1.0 {
     hgraph_w_foreach_edge;
     hgraph_write;
     hgraph_write_dot;
-    
-    node_seen;
-    mark_reachable;
-    
-    mark_same_subgraph;
-    mark_subgraph_groups;
-    split_subgraphs;
     
     search_info_create;
     search_info_destroy;

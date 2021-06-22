@@ -30,7 +30,7 @@ test_dfs( void )
 
   /* Do `dfs' starting from `0' */
   s = search_info_create( g );
-  dfs( s, 0 );
+  gsearch_dfs( s, 0 );
 
   /* What did we learn? */
   TEST_ASSERT( s->reached == ( TEST_SIZE - 1 ) );
@@ -50,7 +50,7 @@ test_dfs( void )
     }
 
   /* Now do more dfs from `n - 1' */
-  dfs( s, TEST_SIZE - 1 );
+  gsearch_dfs( s, TEST_SIZE - 1 );
 
   TEST_ASSERT( s->reached == TEST_SIZE );
   for( i = 0; i < TEST_SIZE; i++ )
@@ -104,7 +104,7 @@ test_bfs( void )
   TEST_ASSERT( graph_edge_count( g ) == ( 2 * ( TEST_SIZE - 2 ) + 1 ) );
 
   s = search_info_create( g );
-  bfs( s, 0 );
+  gsearch_bfs( s, 0 );
 
   /* What did we learn? */
   TEST_ASSERT( s->reached == TEST_SIZE );
@@ -140,7 +140,7 @@ test_bfs( void )
 /**
  * This shows useful properties about how `parents' are marked
  * during searches.
- * It is a precondition to `mark_reachable' working correctly.
+ * It is a precondition to `graph_mark_reachable' working correctly.
  */
   static int
 test_reachable( void )
@@ -155,7 +155,7 @@ test_reachable( void )
   graph_add_edge( g, 4, 3 );
 
   s = search_info_create( g );
-  bfs( s, 0 );
+  gsearch_bfs( s, 0 );
 
   /* Vertices `0', `1', and `2' should be "reachable" from `0',
    * while vertices `3', and `4' are members of a separate "sub-graph" making
@@ -188,7 +188,7 @@ test_mark_reachable( void )
   graph_add_edge( g, 3, 4 );
   graph_add_edge( g, 4, 3 );
 
-  r = mark_reachable( g, 0 );
+  r = graph_mark_reachable( g, 0 );
 
   TEST_ASSERT( r[0] );
   TEST_ASSERT( r[1] );
@@ -199,7 +199,7 @@ test_mark_reachable( void )
   free( r );
   r = NULL;
 
-  r = mark_reachable( g, 1 );
+  r = graph_mark_reachable( g, 1 );
 
   TEST_ASSERT( ! r[0] );
   TEST_ASSERT( r[1] );
@@ -210,7 +210,7 @@ test_mark_reachable( void )
   free( r );
   r = NULL;
 
-  r = mark_reachable( g, 3 );
+  r = graph_mark_reachable( g, 3 );
 
   TEST_ASSERT( ! r[0] );
   TEST_ASSERT( ! r[1] );
@@ -239,7 +239,7 @@ test_mark_same_subgraph( void )
   graph_add_edge( g, 3, 4 );
   graph_add_edge( g, 4, 3 );
 
-  r = mark_same_subgraph( g, 0 );
+  r = graph_mark_same_subgraph( g, 0 );
 
   TEST_ASSERT( r[0] );
   TEST_ASSERT( r[1] );
@@ -250,7 +250,7 @@ test_mark_same_subgraph( void )
   free( r );
   r = NULL;
 
-  r = mark_same_subgraph( g, 1 );
+  r = graph_mark_same_subgraph( g, 1 );
 
   TEST_ASSERT( r[0] );
   TEST_ASSERT( r[1] );
@@ -261,7 +261,7 @@ test_mark_same_subgraph( void )
   free( r );
   r = NULL;
 
-  r = mark_same_subgraph( g, 3 );
+  r = graph_mark_same_subgraph( g, 3 );
 
   TEST_ASSERT( ! r[0] );
   TEST_ASSERT( ! r[1] );
@@ -281,8 +281,8 @@ test_mark_same_subgraph( void )
   static int
 test_count_subgraphs( void )
 {
-  graph_t * g             = graph_create( 5 );
-  int       num_subgraphs = -1;
+  graph_t * g = graph_create( 5 );
+  int num_subgraphs = -1;
 
   graph_add_edge( g, 0, 1 );
   graph_add_edge( g, 1, 2 );
@@ -290,7 +290,7 @@ test_count_subgraphs( void )
   graph_add_edge( g, 3, 4 );
   graph_add_edge( g, 4, 3 );
 
-  num_subgraphs = count_subgraphs( g );
+  num_subgraphs = graph_count_subgraphs( g );
 
   TEST_ASSERT( num_subgraphs == 2 );
 
@@ -313,7 +313,7 @@ test_mark_subgraph_groups( void )
   graph_add_edge( g, 3, 4 );
   graph_add_edge( g, 4, 3 );
 
-  groups = mark_subgraph_groups( g );
+  groups = graph_mark_subgraph_groups( g );
 
   TEST_ASSERT( groups[0] == 0 );
   TEST_ASSERT( groups[1] == 0 );
@@ -343,7 +343,7 @@ test_split_subgraphs( void )
   graph_add_edge( g, 3, 4 );
   graph_add_edge( g, 4, 3 );
 
-  subgraphs = split_subgraphs( g, & num_subgraphs );
+  subgraphs = graph_split_subgraphs( g, & num_subgraphs );
 
   TEST_ASSERT( num_subgraphs == 2 );
 
@@ -394,7 +394,7 @@ test_tarjan( void )
 
   graph_add_edge( g, 6, 0 );
 
-  t = tarjan( g );
+  t = graph_tarjan( g );
 
   /* Four groups exist of `[0], [1, 2, 3]', `[4, 5]', and `[6]' */
   TEST_ASSERT( t[0] != t[1] );

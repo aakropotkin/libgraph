@@ -1,12 +1,15 @@
 
-bin_PROGRAMS = gsort
-lib_LTLIBRARIES = %D%/libgraph.la
-
-%C%_libgraph_la_SOURCES =  %D%/graph.c %D%/pq.c %D%/gsearch.c %D%/dijkstra.c
-%C%_libgraph_la_SOURCES += %D%/shortest_path.c %D%/cycle.c %D%/hgraph.c
+%C%_libgraph_la_SOURCES =  %D%/graph.c
+%C%_libgraph_la_SOURCES += %D%/pq.h %D%/pq.c
+%C%_libgraph_la_SOURCES += %D%/gsearch.c
+%C%_libgraph_la_SOURCES += %D%/dijkstra.c
+%C%_libgraph_la_SOURCES += %D%/cycle.c
+%C%_libgraph_la_SOURCES += %D%/hgraph.c
+%C%_libgraph_la_SOURCES += %D%/shortest_path.c
 %C%_libgraph_la_SOURCES += %D%/graph_util.c
+
 %C%_libgraph_la_LDFLAGS =  $(AM_LDFLAGS)
 %C%_libgraph_la_LDFLAGS += -Wl,--version-script=$(abs_srcdir)/%D%/libgraph.version
 
 gsort_SOURCES = %D%/gsort.c
-gsort_LDADD = %D%/libgraph.la
+gsort_LDADD   = %D%/libgraph.la

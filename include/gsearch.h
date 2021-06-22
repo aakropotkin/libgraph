@@ -66,10 +66,10 @@ void search_info_destroy( struct search_info * );
 /* -------------------------------------------------------------------------- */
 
 /** perform depth-first search starting at root, updating results */
-void dfs( struct search_info * results, int root );
+void gsearch_dfs( struct search_info * results, int root );
 
 /** perform breadth-first search starting at root, updating results */
-void bfs( struct search_info * results, int root );
+void gsearch_bfs( struct search_info * results, int root );
 
 
 /* -------------------------------------------------------------------------- */
@@ -84,40 +84,40 @@ int graph_is_strongly_connected( graph_t * );
 /* -------------------------------------------------------------------------- */
 
 /** Mark vertices which are reachable from vertex `source' */
-char * mark_reachable( graph_t *, int source );
+char * graph_mark_reachable( graph_t *, int source );
 
 
 /* -------------------------------------------------------------------------- */
 
 /** Return the number of disconnected subgraphs in a given graph. */
-int count_subgraphs( graph_t * );
+int graph_count_subgraphs( graph_t * );
 
 /**
  * Mark vertices which are members of the same subgraph as vertex `source'.
  * This might also be phrased as:
  * "Mark all vertices reachable from vertices reachable from `source'"
  */
-char * mark_same_subgraph( graph_t *, int source );
+char * graph_mark_same_subgraph( graph_t *, int source );
 
 
 /** Map vertices to subgraph groups ( unordered ). */
-int * mark_subgraph_groups( graph_t * );
+int * graph_mark_subgraph_groups( graph_t * );
 
 /**
  * Split a graph into subgraphs returned as an array.
  * The length of the resulting array will be stored in `num_subgraphs' */
-graph_t ** split_subgraphs( graph_t *, int * num_subgraphs );
+graph_t ** graph_split_subgraphs( graph_t *, int * num_subgraphs );
 
 
 /* -------------------------------------------------------------------------- */
 
 /** Run Tarjan's algorithm returning a list of `SCC' groups. */
-int * tarjan( graph_t * );
+int * graph_tarjan( graph_t * );
 
 
 /* -------------------------------------------------------------------------- */
 
-int node_seen( struct search_info *, int node );
+int gsearch_node_seen( struct search_info *, int node );
 
 
 /* -------------------------------------------------------------------------- */

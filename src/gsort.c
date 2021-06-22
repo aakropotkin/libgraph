@@ -57,7 +57,7 @@ htarjan_info_create( hgraph_t * h )
 
   /* The first member of `hgraph_t' is `graph_t', but I admit this is kind
    * of evil. */
-  hi->scss = tarjan( (graph_t *) h );
+  hi->scss = graph_tarjan( (graph_t *) h );
   hi->nscss = ilist_max( hi->scss, hi->nkeys ) + 1;
 
   hi->htab = calloc( 1, sizeof( struct hsearch_data ) );
