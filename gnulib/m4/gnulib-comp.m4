@@ -46,12 +46,26 @@ AC_DEFUN([gl_EARLY],
   # Code from module extensions:
   # Code from module extern-inline:
   # Code from module include_next:
+  # Code from module list:
+  # Code from module malloc-posix:
+  # Code from module map:
+  # Code from module realloc-gnu:
+  # Code from module realloc-posix:
+  # Code from module set:
+  # Code from module snippet/_Noreturn:
   # Code from module snippet/arg-nonnull:
   # Code from module snippet/c++defs:
   # Code from module snippet/warn-on-use:
+  # Code from module ssize_t:
+  # Code from module stdbool:
   # Code from module stddef:
-  # Code from module strdup:
+  # Code from module stdlib:
+  # Code from module strdup-posix:
   # Code from module string:
+  # Code from module strndup:
+  # Code from module strnlen:
+  # Code from module sys_types:
+  # Code from module unistd:
 ])
 
 # This macro should be invoked from ./configure.ac, in the section
@@ -69,14 +83,46 @@ AC_DEFUN([gl_INIT],
   gl_COMMON
   gl_source_base='gnulib'
   AC_REQUIRE([gl_EXTERN_INLINE])
+  gl_FUNC_MALLOC_POSIX
+  if test $REPLACE_MALLOC = 1; then
+    AC_LIBOBJ([malloc])
+  fi
+  gl_STDLIB_MODULE_INDICATOR([malloc-posix])
+  gl_FUNC_REALLOC_GNU
+  if test $REPLACE_REALLOC = 1; then
+    AC_LIBOBJ([realloc])
+  fi
+  gl_MODULE_INDICATOR([realloc-gnu])
+  gl_FUNC_REALLOC_POSIX
+  if test $REPLACE_REALLOC = 1; then
+    AC_LIBOBJ([realloc])
+  fi
+  gl_STDLIB_MODULE_INDICATOR([realloc-posix])
+  gt_TYPE_SSIZE_T
+  AM_STDBOOL_H
   gl_STDDEF_H
-  gl_FUNC_STRDUP
-  if test $ac_cv_func_strdup = no; then
+  gl_STDLIB_H
+  gl_FUNC_STRDUP_POSIX
+  if test $ac_cv_func_strdup = no || test $REPLACE_STRDUP = 1; then
     AC_LIBOBJ([strdup])
     gl_PREREQ_STRDUP
   fi
   gl_STRING_MODULE_INDICATOR([strdup])
   gl_HEADER_STRING_H
+  gl_FUNC_STRNDUP
+  if test $HAVE_STRNDUP = 0 || test $REPLACE_STRNDUP = 1; then
+    AC_LIBOBJ([strndup])
+  fi
+  gl_STRING_MODULE_INDICATOR([strndup])
+  gl_FUNC_STRNLEN
+  if test $HAVE_DECL_STRNLEN = 0 || test $REPLACE_STRNLEN = 1; then
+    AC_LIBOBJ([strnlen])
+    gl_PREREQ_STRNLEN
+  fi
+  gl_STRING_MODULE_INDICATOR([strnlen])
+  gl_SYS_TYPES_H
+  AC_PROG_MKDIR_P
+  gl_UNISTD_H
   # End of code from modules
   m4_ifval(gl_LIBSOURCES_LIST, [
     m4_syscmd([test ! -d ]m4_defn([gl_LIBSOURCES_DIR])[ ||
@@ -213,12 +259,27 @@ AC_DEFUN([gltests_LIBSOURCES], [
 # This macro records the list of files which have been installed by
 # gnulib-tool and may be removed by future gnulib-tool invocations.
 AC_DEFUN([gl_FILE_LIST], [
+  lib/_Noreturn.h
   lib/arg-nonnull.h
   lib/c++defs.h
-  lib/dummy.c
+  lib/gl_list.c
+  lib/gl_list.h
+  lib/gl_map.c
+  lib/gl_map.h
+  lib/gl_set.c
+  lib/gl_set.h
+  lib/malloc.c
+  lib/realloc.c
+  lib/stdbool.in.h
   lib/stddef.in.h
+  lib/stdlib.in.h
   lib/strdup.c
   lib/string.in.h
+  lib/strndup.c
+  lib/strnlen.c
+  lib/sys_types.in.h
+  lib/unistd.c
+  lib/unistd.in.h
   lib/warn-on-use.h
   m4/00gnulib.m4
   m4/absolute-header.m4
@@ -226,9 +287,19 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/extern-inline.m4
   m4/gnulib-common.m4
   m4/include_next.m4
+  m4/malloc.m4
+  m4/off_t.m4
+  m4/realloc.m4
+  m4/ssize_t.m4
+  m4/stdbool.m4
   m4/stddef_h.m4
+  m4/stdlib_h.m4
   m4/strdup.m4
   m4/string_h.m4
+  m4/strndup.m4
+  m4/strnlen.m4
+  m4/sys_types_h.m4
+  m4/unistd_h.m4
   m4/warn-on-use.m4
   m4/wchar_t.m4
   m4/zzgnulib.m4

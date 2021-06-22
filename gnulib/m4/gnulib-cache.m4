@@ -37,12 +37,22 @@
 #  --no-conditional-dependencies \
 #  --libtool \
 #  --macro-prefix=gl \
-#  strdup
+#  list \
+#  map \
+#  realloc-gnu \
+#  set \
+#  strdup-posix \
+#  strndup
 
 # Specification in the form of a few gnulib-tool.m4 macro invocations:
 gl_LOCAL_DIR([])
 gl_MODULES([
-  strdup
+  list
+  map
+  realloc-gnu
+  set
+  strdup-posix
+  strndup
 ])
 gl_AVOID([])
 gl_SOURCE_BASE([gnulib])
