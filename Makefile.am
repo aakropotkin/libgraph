@@ -10,6 +10,10 @@ include $(top_srcdir)/src/Include.am
 include $(top_srcdir)/include/Include.am
 include $(top_srcdir)/src/test/Include.am
 
+if AM_BEAR
+.PHONY: bearcc
+bearcc: $(BEAROUTFILE)
 
-$(top_srcdir)/compile_commands.json: clean
-	$(BEAR) --output $@ -- $(MAKE) all
+$(BEAROUTFILE): clean
+	$(BEAR) $(BEARFLAGS) $(MAKE) $(AM_MAKEFLAGS) all
+endif
