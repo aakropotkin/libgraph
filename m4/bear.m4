@@ -16,7 +16,7 @@ if test -n "$BEAR"; then
     BEAROUTFILE='$(top_builddir)/compile_commands.json';
   fi
   if test -z "$BEARFLAGS"; then
-    BEARFLAGS="--output $BEAROUTFILE --";
+    BEARFLAGS='--output $(BEAROUTFILE) --';
   fi
 fi
 AC_SUBST([BEAR])
