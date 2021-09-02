@@ -11,8 +11,12 @@ INSTALL_PREFIX = $(BUILDDIR)/output
 $(BUILDDIR):
 	mkdir -p $@
 
+AUTORECONF_OUTPUTS =  Makefile.in configure compile config.guess config.sub
+AUTORECONF_OUTPUTS += install-sh test-driver depcomp missing ltmain.sh
+AUTORECONF_OUTPUTS := $(addprefix $(TOP)/,$(AUTORECONF_OUTPUTS))
 
-$(TOP)/Makefile.in $(TOP)/configure: $(TOP)/Makefile.am $(TOP)/configure.ac
+
+$(AUTORECONF_OUTPUTS): $(TOP)/Makefile.am $(TOP)/configure.ac
 	autoreconf -if $(TOP)
 
 
