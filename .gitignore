@@ -1,8 +1,6 @@
 *.o
 .cache
 gmon.out
-out/
-Makefile
 *~
 .deps/
 .dirstamp

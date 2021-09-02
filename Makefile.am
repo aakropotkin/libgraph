@@ -10,7 +10,7 @@ include $(top_srcdir)/src/Include.am
 include $(top_srcdir)/include/Include.am
 include $(top_srcdir)/src/test/Include.am
 
-if AM_BEAR
+if BEAR_AM
 .PHONY: bearcc
 bearcc: $(BEAROUTFILE)
 
