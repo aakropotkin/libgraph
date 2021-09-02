@@ -13,10 +13,13 @@ $(BUILDDIR):
 
 AUTORECONF_OUTPUTS =  Makefile.in configure compile config.guess config.sub
 AUTORECONF_OUTPUTS += install-sh test-driver depcomp missing ltmain.sh
+AUTORECONF_OUTPUTS += config.h.in
+AUTORECONF_OUTPUTS += $(addprefix m4/,libtool.m4 ltoptions.m4 ltsugar.m4)
+AUTORECONF_OUTPUTS += $(addprefix m4/,ltversion.m4 lt~obsolete.m4)
 AUTORECONF_OUTPUTS := $(addprefix $(TOP)/,$(AUTORECONF_OUTPUTS))
 
 
-$(AUTORECONF_OUTPUTS): $(TOP)/Makefile.am $(TOP)/configure.ac
+$(AUTORECONF_OUTPUTS): $(addprefix $(TOP)/,Makefile.am configure.ac m4/bear.m4)
 	autoreconf -if $(TOP)
 
 
@@ -36,7 +39,13 @@ $(CONFIGURE_OUTPUTS): $(addprefix $(TOP)/,configure config.h.in Makefile.in)
 
 topclean:
 	-rm -rf $(BUILDDIR)
-	-rm -rf $(TOP)/Makefile.in $(TOP)/configure
+	-rm -f $(TOP)/Makefile.in $(TOP)/configure
+	-rm -f $(addsuffix ~,$(AUTORECONF_OUTPUTS))
+
+
+compile_commands.json: $(BUILDDIR)/compile_commands.json
+	$(MAKE) -C $(BUILDDIR) -f $(BUILDDIR)/Makefile $@;  \
+	cp $< $@
 
 
 .DEFAULT all:: | $(BUILDDIR)/Makefile
