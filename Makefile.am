@@ -40,7 +40,6 @@ include $(top_srcdir)/build-aux/checksum.am
 .PHONY: libchecksums
 libchecksums: $(LTLIBRARIES:.la=.libsums)
 
-
 $(BEAROUTFILE): clean
 	$(BEAR) $(BEARFLAGS) $(MAKE) all
 if NIX_CC_WRAPPER
