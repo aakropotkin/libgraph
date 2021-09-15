@@ -105,11 +105,14 @@ graph_clone( graph_t * g )
   void
 graph_destroy( graph_t * g )
 {
-  int i;
-
-  for( i = 0; i < g->n; i++ )
+  assert( g != NULL );
+  for( int i = 0; i < g->n; i++ )
     {
-      free( g->alist[i] );
+      if ( g->alist[i] != NULL )
+        {
+          free( g->alist[i] );
+          g->alist[i] = NULL;
+        }
     }
   free( g );
 }
