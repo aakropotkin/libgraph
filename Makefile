@@ -29,11 +29,12 @@ CONFIGURE_OUTPUTS := $(addprefix $(BUILDDIR)/,$(CONFIGURE_OUTPUTS))
 
 $(CONFIGURE_OUTPUTS): | $(BUILDDIR)
 $(CONFIGURE_OUTPUTS): $(addprefix $(TOP)/,configure config.h.in Makefile.in)
-	cd $(BUILDDIR);                                 \
-	if test -x $(BUILDDIR)/config.status; then      \
-	  $(BUILDDIR)/config.status --recheck;          \
-	else                                            \
-	  $(TOP)/configure --prefix=$(INSTALL_PREFIX);  \
+	cd $(BUILDDIR);                                \
+	if test -x $(BUILDDIR)/config.status; then     \
+	  $(BUILDDIR)/config.status --recheck;         \
+	else                                           \
+	  $(TOP)/configure --prefix=$(INSTALL_PREFIX)  \
+		                 BEAR=`which bear`;          \
 	fi
 
 
@@ -42,6 +43,8 @@ topclean:
 	-rm -f $(TOP)/Makefile.in $(TOP)/configure
 	-rm -f $(addsuffix ~,$(AUTORECONF_OUTPUTS))
 
+
+$(BUILDDIR)/compile_commands.json: $(BUILDDIR)/Makefile
 
 compile_commands.json: $(BUILDDIR)/compile_commands.json
 	$(MAKE) -C $(BUILDDIR) -f $(BUILDDIR)/Makefile $@;  \
