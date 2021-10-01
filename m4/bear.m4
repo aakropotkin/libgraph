@@ -16,7 +16,7 @@ AS_IF([test -n "$BEAR"],
        [BEAR_VERSION=`$BEAR --version|cut -d" " -f2`
        AS_CASE([$BEAR_VERSION],
          [2.*], [BEARFLAGS='-o $(BEAROUTFILE)'],
-         [3.*], [BEARFLAGS='--output $(BEAROUTFILE) --']
+         [3.*], [BEARFLAGS='--output $(BEAROUTFILE) --'],
                 [BEARFLAGS=''])])
 AC_SUBST([BEAR])
 AC_SUBST([BEAROUTFILE])
