@@ -7,13 +7,15 @@ AC_DEFUN_ONCE([AC_PROG_BEAR],
 [AC_ARG_VAR([BEAR],      [Bear generator command])dnl
 AC_ARG_VAR([BEARFLAGS],  [Bear generator flags])dnl
 AC_ARG_VAR([BEAROUTFILE], [Bear generator output file])dnl
-AS_IF([test -z "$BEAR"], [AC_CHECK_PROG(BEAR, bear, bear)])
+AK_PROG_PATH([BEAR], [bear])
+AC_SUBST([BEAR])
+AC_SUBST([BEAROUTFILE])
+AC_SUBST([BEARFLAGS])
 AS_IF([test -n "$BEAR"],
-[BEAR=`realpath -s "$BEAR"`
- AS_IF([test -z "$BEAROUTFILE"],
-       [BEAROUTFILE='$(top_builddir)/compile_commands.json'])
+[AS_IF([test -z "$BEAROUTFILE"],
+       [BEAROUTFILE="\$(top_builddir)/compile_commands.json"])
  AS_IF([test -z "$BEARFLAGS"],
-       [BEAR_VERSION=`$BEAR --version|cut -d" " -f2`
+       [BEAR_VERSION="`$BEAR --version|cut -d\" \" -f2`"
        AS_CASE([$BEAR_VERSION],
          [2.*], [BEARFLAGS='-o $(BEAROUTFILE)'],
          [3.*], [BEARFLAGS='--output $(BEAROUTFILE) --'],
