@@ -9,7 +9,8 @@ AM_CFLAGS += -ggdb3
 AM_CFLAGS += -Wall
 AM_CFLAGS += -pedantic
 
-AM_CPPFLAGS = 
+AM_CPPFLAGS =
+AM_CPPFLAGS += -include config.h
 AM_CPPFLAGS += -I$(top_srcdir)/include
 AM_CPPFLAGS += -I$(top_builddir)/gnulib
 AM_CPPFLAGS += -I$(top_srcdir)/gnulib

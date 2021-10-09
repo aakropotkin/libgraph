@@ -43,5 +43,7 @@ AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 AC_CHECK_FUNCS([memmove])
 
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile
+                 gnulib/Makefile
+                 gnulib/tests/Makefile])
 AC_OUTPUT
