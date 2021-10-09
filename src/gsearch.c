@@ -11,13 +11,12 @@
   static int *
 create_empty_array( int n )
 {
-  int * a = NULL;
-  int   i = -1;
+  assert( 0 < n );
 
-  a = malloc( sizeof( *a ) * n );
+  int * a = malloc( sizeof( int ) * n );
   assert( a != NULL );
 
-  for( i = 0; i < n; i++ )
+  for( int i = 0; i < n; i++ )
     {
       a[i] = SEARCH_INFO_NULL;
     }
@@ -48,8 +47,13 @@ search_info_create( graph_t * g )
 
   s->preorder = create_empty_array( n );
   assert( s->lowlink != NULL );
+
   s->time = create_empty_array( n );
+  assert( s->time != NULL );
+
   s->parent = create_empty_array( n );
+  assert( s->parent != NULL );
+
   s->depth = create_empty_array( n );
   assert( s->tj_stack != NULL );
 
@@ -61,18 +65,51 @@ search_info_create( graph_t * g )
   void
 search_info_destroy( struct search_info * s )
 {
-  free( s->depth );
-  s->depth = NULL;
-  free( s->parent );
-  s->parent = NULL;
-  free( s->time );
-  s->time = NULL;
-  free( s->preorder );
-  s->preorder = NULL;
-  free( s->lowlink );
-  s->lowlink = NULL;
-  free( s );
-  s = NULL;
+  if ( s == NULL )
+    {
+      return;
+    }
+
+  /* `depth' and `tj_stack' are a union, but GCC gripes if you don't explicitly
+   * attempt to `free' both names. */
+  if ( s->depth != NULL )
+    {
+      free( s->depth );
+      s->depth = NULL;
+    }
+  if ( s->tj_stack != NULL )
+    {
+      free( s->tj_stack );
+      s->tj_stack = NULL;
+    }
+  /* Same thing for `preorder' and `lowlink' */
+  if ( s->preorder != NULL )
+    {
+      free( s->preorder );
+      s->preorder = NULL;
+    }
+  if ( s->lowlink != NULL )
+    {
+      free( s->lowlink );
+      s->lowlink = NULL;
+    }
+
+  if ( s->parent != NULL )
+    {
+      free( s->parent );
+      s->parent = NULL;
+    }
+  if ( s->time != NULL )
+    {
+      free( s->time );
+      s->time = NULL;
+    }
+
+  if ( s != NULL )
+    {
+      free( s );
+      s = NULL;
+    }
 }
 
 
@@ -102,8 +139,16 @@ queue_create( int n )
   q->e = malloc( sizeof( struct edge ) * n );
   assert( q->e != NULL );
 
-  q->top = 0;
-  q->bottom = 0;
+  if ( q->e == NULL )
+    {
+      free( q );
+      q = NULL;
+    }
+  else
+    {
+      q->top = 0;
+      q->bottom = 0;
+    }
 
   return q;
 }
@@ -125,8 +170,11 @@ queue_destroy( struct queue * q )
     {
       return;
     }
-  free( q->e );
-  q->e = NULL;
+  if ( q->e != NULL )
+    {
+      free( q->e );
+      q->e = NULL;
+    }
   free( q );
   q = NULL;
 }

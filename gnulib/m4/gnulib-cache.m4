@@ -1,4 +1,4 @@
-# Copyright (C) 2002-2020 Free Software Foundation, Inc.
+# Copyright (C) 2002-2021 Free Software Foundation, Inc.
 #
 # This file is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,12 +31,14 @@
 #  --lib=libgnu \
 #  --source-base=gnulib \
 #  --m4-base=gnulib/m4 \
-#  --doc-base=doc \
-#  --tests-base=tests \
-#  --aux-dir=. \
+#  --doc-base=gnulib/doc \
+#  --tests-base=gnulib/tests \
+#  --aux-dir=build-aux \
+#  --with-tests \
 #  --no-conditional-dependencies \
 #  --libtool \
 #  --macro-prefix=gl \
+#  --vc-files \
 #  list \
 #  map \
 #  realloc-gnu \
@@ -58,11 +60,13 @@ gl_AVOID([])
 gl_SOURCE_BASE([gnulib])
 gl_M4_BASE([gnulib/m4])
 gl_PO_BASE([])
-gl_DOC_BASE([doc])
-gl_TESTS_BASE([tests])
+gl_DOC_BASE([gnulib/doc])
+gl_TESTS_BASE([gnulib/tests])
+gl_WITH_TESTS
 gl_LIB([libgnu])
 gl_MAKEFILE_NAME([])
 gl_LIBTOOL
 gl_MACRO_PREFIX([gl])
 gl_PO_DOMAIN([])
 gl_WITNESS_C_MACRO([])
+gl_VC_FILES([true])

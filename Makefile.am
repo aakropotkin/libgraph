@@ -1,12 +1,18 @@
-ACLOCAL_AMFLAGS = -I m4 -I gnulib/m4
+ACLOCAL_AMFLAGS =
+ACLOCAL_AMFLAGS += -I m4
+ACLOCAL_AMFLAGS += -I gnulib/m4
 
 SUBDIRS = gnulib
 
-EXTRA_DIST = m4/gnulib-cache.m4
+AM_CFLAGS =
+AM_CFLAGS += -ggdb3
+AM_CFLAGS += -Wall
+AM_CFLAGS += -pedantic
 
-AM_CFLAGS = -ggdb3 -Wall -pedantic
-AM_CPPFLAGS =  -I$(top_srcdir)/include -D_GNU_SOURCE
-AM_CPPFLAGS += -I$(top_builddir)/gnulib -I$(top_srcdir)/gnulib
+AM_CPPFLAGS = 
+AM_CPPFLAGS += -I$(top_srcdir)/include
+AM_CPPFLAGS += -I$(top_builddir)/gnulib
+AM_CPPFLAGS += -I$(top_srcdir)/gnulib
 
 LIBADD = $(abs_top_builddir)/gnulib/libgnu.la
 
@@ -17,6 +23,7 @@ include $(top_srcdir)/src/Include.am
 include $(top_srcdir)/include/Include.am
 include $(top_srcdir)/src/test/Include.am
 
-
-$(top_srcdir)/compile_commands.json: clean
-	$(BEAR) --output $@ -- $(MAKE) all
+if BEAR_AM
+$(BEAROUTFILE): clean
+	$(BEAR) $(BEARFLAGS) $(MAKE) all
+endif

@@ -11,7 +11,5 @@
 %C%_libgraph_la_LDFLAGS =  $(AM_LDFLAGS)
 %C%_libgraph_la_LDFLAGS += -Wl,--version-script=$(abs_srcdir)/%D%/libgraph.version
 
-%C%_libgraph_la_LIBADD = $(abs_top_builddir)/gnulib/libgnu.la
-
 gsort_SOURCES = %D%/gsort.c
 gsort_LDADD   = %D%/libgraph.la

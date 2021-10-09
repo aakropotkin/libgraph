@@ -3,17 +3,22 @@
 
 AC_PREREQ([2.71])
 AC_INIT([libgraph],[0.1.0],[alex.ameen.tx@gmail.com])
-AC_CONFIG_MACRO_DIRS([m4])
-#AM_PREREQ([1.16.3])
-AM_INIT_AUTOMAKE([foreign subdir-objects])
-LT_PREREQ([2.4.6])
-LT_INIT
+AC_CONFIG_MACRO_DIRS([m4 gnulib/m4])
+AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_SRCDIR([src/pq.c])
-AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_HEADERS([include/config.h])
+AC_USE_SYSTEM_EXTENSIONS
 
-# Checks for programs.
+AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects])
+
 AC_PROG_CC
 gl_EARLY
+AM_PROG_AR
+
+LT_PREREQ([2.4.6])
+LT_INIT
+
+# Checks for programs.
 AC_PROG_AWK
 AC_PROG_CXX
 AC_PROG_CPP
@@ -38,6 +43,5 @@ AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 AC_CHECK_FUNCS([memmove])
 
-AC_CONFIG_FILES([Makefile
-                 gnulib/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
