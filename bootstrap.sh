@@ -2,12 +2,20 @@
 mkdir -p m4;
 
 declare -a GNULIB_MODULES=(
-  list
-  map
+  array-list
+  linked-list
+  linkedhash-list
+  array-map
+  hash-map
   realloc-gnu
-  set
+  hash-set
   strdup-posix
   strndup
+  stddef
+  stdlib
+  stdio
+  stdbool
+  stdint
 );
 
 gnulib-tool                      \

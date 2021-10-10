@@ -32,3 +32,5 @@ output/
 result/
 stamp-h1
 test-driver
+.ccls-cache/
+gsort

@@ -20,6 +20,8 @@ LIBADD = $(abs_top_builddir)/gnulib/libgnu.la
 bin_PROGRAMS = gsort
 lib_LTLIBRARIES = src/libgraph.la
 
+EXTRA_DIST = m4/gnulib-cache.m4
+
 include $(top_srcdir)/src/Include.am
 include $(top_srcdir)/include/Include.am
 include $(top_srcdir)/src/test/Include.am

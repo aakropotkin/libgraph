@@ -39,20 +39,36 @@
 #  --libtool \
 #  --macro-prefix=gl \
 #  --vc-files \
-#  list \
-#  map \
+#  array-list \
+#  array-map \
+#  hash-map \
+#  hash-set \
+#  linked-list \
+#  linkedhash-list \
 #  realloc-gnu \
-#  set \
+#  stdbool \
+#  stddef \
+#  stdint \
+#  stdio \
+#  stdlib \
 #  strdup-posix \
 #  strndup
 
 # Specification in the form of a few gnulib-tool.m4 macro invocations:
 gl_LOCAL_DIR([])
 gl_MODULES([
-  list
-  map
+  array-list
+  array-map
+  hash-map
+  hash-set
+  linked-list
+  linkedhash-list
   realloc-gnu
-  set
+  stdbool
+  stddef
+  stdint
+  stdio
+  stdlib
   strdup-posix
   strndup
 ])
