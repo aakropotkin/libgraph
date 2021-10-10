@@ -8,25 +8,25 @@ TESTS =  %D%/test_graph %D%/test_gsearch %D%/test_shortest_path
 TESTS += %D%/test_cycle %D%/test_hgraph %D%/test_graph_util
 
 %C%_test_graph_SOURCES = %D%/test_graph.c $(top_srcdir)/include/graph_test.h
-%C%_test_graph_LDADD = $(top_builddir)/src/libgraph.la
+%C%_test_graph_LDADD = lib/libgraph.la
 
 %C%_test_gsearch_SOURCES = %D%/test_gsearch.c $(top_srcdir)/include/graph_test.h
-%C%_test_gsearch_LDADD = $(top_builddir)/src/libgraph.la
+%C%_test_gsearch_LDADD = lib/libgraph.la
 
 %C%_test_shortest_path_SOURCES = %D%/test_shortest_path.c
 %C%_test_shortest_path_SOURCES += $(top_srcdir)/include/graph_test.h
-%C%_test_shortest_path_LDADD = $(top_builddir)/src/libgraph.la
+%C%_test_shortest_path_LDADD = lib/libgraph.la
 
 %C%_test_cycle_SOURCES = %D%/test_cycle.c $(top_srcdir)/include/graph_test.h
-%C%_test_cycle_LDADD = $(top_builddir)/src/libgraph.la
+%C%_test_cycle_LDADD = lib/libgraph.la
 
 %C%_test_hgraph_SOURCES = %D%/test_hgraph.c $(top_srcdir)/include/graph_test.h
-%C%_test_hgraph_LDADD = $(top_builddir)/src/libgraph.la
+%C%_test_hgraph_LDADD = lib/libgraph.la
 %C%_test_hgraph_CPPFLAGS = $(AM_CPPFLAGS) -DTEST_SRCDIR='"$(abs_srcdir)/%D%"'
 
 %C%_test_graph_util_SOURCES = %D%/test_graph_util.c
 %C%_test_graph_util_SOURCES += $(top_srcdir)/include/graph_test.h
-%C%_test_graph_util_LDADD = $(top_builddir)/src/libgraph.la
+%C%_test_graph_util_LDADD = lib/libgraph.la
 
 
 #VALGRIND = valgrind

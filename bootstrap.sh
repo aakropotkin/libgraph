@@ -34,3 +34,10 @@ gnulib-tool                      \
   ;
 
 aclocal && autoreconf -if;
+
+echo "Patching '/usr/bin/' usage in 'm4/libtool.m4' and 'configure'";
+chmod +w m4/libtool.m4;
+chmod +w configure;
+sed -i 's:/usr/bin/::g' m4/libtool.m4 configure;
+
+echo "Done";

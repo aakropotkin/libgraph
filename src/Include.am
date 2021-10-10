@@ -1,15 +1,16 @@
 
-%C%_libgraph_la_SOURCES =  %D%/graph.c
-%C%_libgraph_la_SOURCES += %D%/pq.h %D%/pq.c
-%C%_libgraph_la_SOURCES += %D%/gsearch.c
-%C%_libgraph_la_SOURCES += %D%/dijkstra.c
-%C%_libgraph_la_SOURCES += %D%/cycle.c
-%C%_libgraph_la_SOURCES += %D%/hgraph.c
-%C%_libgraph_la_SOURCES += %D%/shortest_path.c
-%C%_libgraph_la_SOURCES += %D%/graph_util.c
+lib_libgraph_la_SOURCES =  %D%/graph.c
+lib_libgraph_la_SOURCES += %D%/pq.h %D%/pq.c
+lib_libgraph_la_SOURCES += %D%/gsearch.c
+lib_libgraph_la_SOURCES += %D%/dijkstra.c
+lib_libgraph_la_SOURCES += %D%/cycle.c
+lib_libgraph_la_SOURCES += %D%/hgraph.c
+lib_libgraph_la_SOURCES += %D%/shortest_path.c
+lib_libgraph_la_SOURCES += %D%/graph_util.c
 
-%C%_libgraph_la_LDFLAGS =  $(AM_LDFLAGS)
-%C%_libgraph_la_LDFLAGS += -Wl,--version-script=$(abs_srcdir)/%D%/libgraph.version
+lib_libgraph_la_LDFLAGS =  $(AM_LDFLAGS)
+lib_libgraph_la_LDFLAGS += -Wl,--version-script=$(abs_srcdir)/%D%/libgraph.version
 
-gsort_SOURCES = %D%/gsort.c
-gsort_LDADD   = %D%/libgraph.la
+bin_gsort_SOURCES =  %D%/gsort.c
+bin_gsort_LDADD   =  $(AM_LDADD)
+bin_gsort_LDADD   += lib/libgraph.la

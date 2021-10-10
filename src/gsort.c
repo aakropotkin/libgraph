@@ -123,6 +123,8 @@ htarjan_get_scss( struct htarjan_info * hi, const char * u )
 
 /* -------------------------------------------------------------------------- */
 
+#if 0
+
 typedef void (*htj_scss_foreach_fn)( hgraph_t *,
                                      int        scss,
                                      char     * u,
@@ -167,6 +169,8 @@ htarjan_scss_foreach( hgraph_t            * h,
         }
     }
 }
+
+#endif
 
 
 /* -------------------------------------------------------------------------- */

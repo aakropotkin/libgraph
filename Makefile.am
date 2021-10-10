@@ -7,6 +7,7 @@ SUBDIRS = gnulib
 AM_CFLAGS =
 AM_CFLAGS += -ggdb3
 AM_CFLAGS += -Wall
+AM_CFLAGS += -Werror
 AM_CFLAGS += -pedantic
 
 AM_CPPFLAGS =
@@ -17,8 +18,8 @@ AM_CPPFLAGS += -I$(top_srcdir)/gnulib
 
 LIBADD = $(abs_top_builddir)/gnulib/libgnu.la
 
-bin_PROGRAMS = gsort
-lib_LTLIBRARIES = src/libgraph.la
+bin_PROGRAMS = bin/gsort
+lib_LTLIBRARIES = lib/libgraph.la
 
 EXTRA_DIST = m4/gnulib-cache.m4
 
