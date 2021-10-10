@@ -27,6 +27,11 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_BEAR
 
+# Check for Nix features.
+AK_CHECK_NIX
+AS_VAR_IF([ak_cv_nix_cc_wrapper], [yes],
+          [AC_PATH_PROG([JQ], [jq], [:])])
+
 # Checks for libraries.
 
 # For gnulib.

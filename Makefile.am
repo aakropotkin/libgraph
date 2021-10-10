@@ -27,7 +27,18 @@ include $(top_srcdir)/src/Include.am
 include $(top_srcdir)/include/Include.am
 include $(top_srcdir)/src/test/Include.am
 
+CLEANFILES =
+
 if BEAR_AM
+CLEANFILES += $(BEAROUTFILE)
+if NIX_CC_WRAPPER
+CLEANFILES += $(BEAROUTFILE)~
+endif
+
 $(BEAROUTFILE): clean
 	$(BEAR) $(BEARFLAGS) $(MAKE) all
+if NIX_CC_WRAPPER
+	cat $@|$(JQ) '[.[]|select(.arguments[0]|contains("nix-profile")|not)]' > $@~
+	mv $@~ $@
+endif
 endif
