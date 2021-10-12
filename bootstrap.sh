@@ -33,11 +33,29 @@ gnulib-tool                      \
   ${GNULIB_MODULES[*]}           \
   ;
 
-aclocal && autoreconf -if;
 
-echo "Patching '/usr/bin/' usage in 'm4/libtool.m4' and 'configure'";
-chmod +w m4/libtool.m4;
-chmod +w configure;
-sed -i 's:/usr/bin/::g' m4/libtool.m4 configure;
+# `autoreconf' is not used so that we can patch `libtool.m4' before
+# running `autoconf'.
+
+##aclocal && autoreconf -if;
+
+declare -a UB_PATCHES=(
+  m4/libtool.m4
+  build-aux/ltmain.sh
+);
+
+set -e;
+aclocal --force --install;
+libtoolize -c;
+echo "Patching '/usr/bin/' usage in autotools";
+chmod +w ${UB_PATCHES[*]};
+sed -i 's:/usr/bin/::g' ${UB_PATCHES[*]};
+aclocal --force --install;
+autoconf -f;
+autoheader -f;
+autoheader -f;
+automake -acf;
+set +e;
+
 
 echo "Done";
