@@ -3,8 +3,3 @@
 	@source $<; ltlibdir=$$( dirname $<; )/.libs;                               \
 	md5sum --tag $$ltlibdir/$$dlname $$ltlibdir/$$old_library                   \
 	  |sed "s:($$ltlibdir/:(:" > $@
-
-	
-SUFFIXES = .md5 .la .libsums
-.md5:
-	md5sum --tag $< >$@
