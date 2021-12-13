@@ -1,3 +1,4 @@
+result/
 *.o
 .cache
 gmon.out
