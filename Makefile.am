@@ -33,7 +33,7 @@ if BEAR_AM
 CLEANFILES += $(BEAROUTFILE)
 if NIX_CC_WRAPPER
 CLEANFILES += $(BEAROUTFILE)~
-endif
+endif  # NIX_CC_WRAPPER
 
 
 include $(top_srcdir)/build-aux/checksum.am
@@ -46,5 +46,5 @@ $(BEAROUTFILE): clean
 if NIX_CC_WRAPPER
 	cat $@|$(JQ) '[.[]|select(.arguments[0]|contains("nix-profile")|not)]' > $@~
 	mv $@~ $@
-endif
-endif
+endif  #NIX_CC_WRAPPER
+endif  # BEAR_AM

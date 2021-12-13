@@ -1,8 +1,8 @@
 AN_MAKEVAR([BEAR], [AC_PROG_BEAR])
 AN_PROGRAM([bear], [AC_PROG_BEAR])
-# Indicating the output file differs with versions:
 # v3: --output FILE
 # v2: --o FILE
+# v2: --cdb FILE
 AC_DEFUN_ONCE([AC_PROG_BEAR],
 [AC_ARG_VAR([BEAR],      [Bear generator command])dnl
 AC_ARG_VAR([BEARFLAGS],  [Bear generator flags])dnl
