@@ -22,7 +22,6 @@ ltmain.sh
 missing
 stamp-h1
 test-driver
-aclocal.m4
 Makefile.in
 config.h.in
 build/
