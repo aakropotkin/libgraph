@@ -28,3 +28,4 @@ Makefile.in
 config.h.in
 build/
 compile_commands.json
+Makefile
