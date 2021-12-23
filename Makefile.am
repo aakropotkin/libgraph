@@ -2,6 +2,7 @@ ACLOCAL_AMFLAGS = -I m4
 
 AM_CFLAGS = -ggdb3 -Wall -pedantic
 AM_CPPFLAGS = -I$(top_srcdir)/include -D_GNU_SOURCE
+EXTRA_DIST =
 
 bin_PROGRAMS = gsort
 lib_LTLIBRARIES = src/libgraph.la

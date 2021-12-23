@@ -3,6 +3,7 @@ noinst_PROGRAMS =  %D%/test_graph %D%/test_gsearch %D%/test_shortest_path
 noinst_PROGRAMS += %D%/test_cycle %D%/test_hgraph %D%/test_graph_util
 
 noinst_DATA = %D%/test_hgraph_fread.txt
+EXTRA_DIST += %D%/test_hgraph_fread.txt
 
 TESTS =  %D%/test_graph %D%/test_gsearch %D%/test_shortest_path
 TESTS += %D%/test_cycle %D%/test_hgraph %D%/test_graph_util
