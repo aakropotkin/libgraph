@@ -1,11 +1,15 @@
 {
   description = "Graph algorithm library in C";
-
-  outputs = { self, nixpkgs }: {
-
-    packages.x86_64-linux.libgraph =
-	( import nixpkgs { system = "x86_64-linux"; } ).callPackage ./default.nix {};
-    packages.x86_64-linux.default = self.packages.x86_64-linux.libgraph;
-
+  inputs.utils.url = "github:numtide/flake-utils";
+  inputs.utils.inputs.nixpkgs.follows = "/nixpkgs";
+  outputs = { self, nixpkgs, utils }: let
+    inherit (utils.lib) eachDefaultSystemMap;
+  in {
+    packages = eachDefaultSystemMap ( system: let
+      pkgsFor = nixpkgs.legacyPackages.${system};
+    in {
+      libgraph = pkgsFor.callPackage ./default.nix {};
+      default  = self.packages.${system}.libgraph;
+    } );
   };
 }
